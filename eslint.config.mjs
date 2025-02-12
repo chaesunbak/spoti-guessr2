@@ -10,7 +10,19 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.config({
+    extends: [
+      "next/core-web-vitals",
+      "next/typescript",
+      "plugin:@tanstack/eslint-plugin-query/recommended",
+    ],
+    plugins: ["@tanstack/query"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@tanstack/query/exhaustive-deps": "error",
+      "@tanstack/query/prefer-query-object": "error",
+    },
+  }),
 ];
 
 export default eslintConfig;
