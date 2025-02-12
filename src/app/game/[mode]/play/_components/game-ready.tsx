@@ -111,11 +111,26 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
     if (!showTutorial || step.element !== elementId) return null;
 
     return (
-      <div className="space-y-2">
-        <h4 className="font-semibold">{step.title}</h4>
+      <div
+        className="space-y-2"
+        role="dialog"
+        aria-labelledby={`tutorial-title-${elementId}`}
+      >
+        <h4 id={`tutorial-title-${elementId}`} className="font-semibold">
+          {step.title}
+        </h4>
         <p className="text-sm">{step.description.replace("{mode}", mode)}</p>
         <div className="flex gap-2 pt-2">
-          <Button size="sm" className="flex-1" onClick={handleNextStep}>
+          <Button
+            size="sm"
+            className="flex-1"
+            onClick={handleNextStep}
+            aria-label={
+              currentStep === tutorialSteps.length - 1
+                ? "Finish tutorial"
+                : "Next tutorial step"
+            }
+          >
             {currentStep === tutorialSteps.length - 1 ? "Finish" : "Next"}
           </Button>
           <Button
@@ -123,6 +138,7 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
             variant="secondary"
             onClick={handleSkipTutorial}
             className="flex-1"
+            aria-label="Skip tutorial"
           >
             Skip Tutorial
           </Button>
@@ -133,7 +149,11 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
 
   return (
     <TooltipProvider>
-      <div className="w-full">
+      <div
+        className="w-full"
+        role="region"
+        aria-label="Game preparation screen"
+      >
         <div className="flex flex-col items-center gap-4">
           <div className="w-full max-w-7xl">
             <div className="flex flex-col items-start justify-between gap-2 rounded-xl bg-muted p-4 backdrop-blur-sm md:gap-4 lg:flex-row lg:items-center lg:gap-8 lg:p-6">
@@ -143,6 +163,8 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
                     <div
                       id="round-info"
                       className="flex flex-col gap-2 text-left"
+                      role="status"
+                      aria-label="Round information"
                     >
                       <h2>Round</h2>
                       <p className="text-muted-foreground">
@@ -161,11 +183,16 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
                     <div
                       id="lives-display"
                       className="flex flex-col items-center rounded-lg bg-white/10"
+                      role="status"
+                      aria-label="Lives remaining: 3"
                     >
                       <span className="text-xs font-medium tracking-wider text-muted-foreground lg:text-sm">
                         LIVES
                       </span>
-                      <div className="flex items-center gap-1">
+                      <div
+                        className="flex items-center gap-1"
+                        aria-hidden="true"
+                      >
                         {Array.from({ length: 3 }).map((_, i) => (
                           <Heart
                             key={i}
@@ -186,6 +213,8 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
                     <div
                       id="score-display"
                       className="flex flex-col items-center rounded-lg bg-white/10"
+                      role="status"
+                      aria-label="Current score: 0"
                     >
                       <span className="text-xs font-medium tracking-wider text-muted-foreground lg:text-sm">
                         SCORE
@@ -207,6 +236,8 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
                     <div
                       id="streak-display"
                       className="flex flex-col items-center rounded-lg bg-white/10"
+                      role="status"
+                      aria-label="Current streak: 0"
                     >
                       <span className="text-xs font-medium tracking-wider text-muted-foreground lg:text-sm">
                         STREAK
@@ -229,9 +260,9 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
                       variant="secondary"
                       size="icon"
                       className="rounded-full transition-colors hover:bg-destructive hover:text-destructive-foreground"
+                      aria-label="End game"
                     >
-                      <XIcon className="h-4 w-4" />
-                      <span className="sr-only">End Game</span>
+                      <XIcon className="h-4 w-4" aria-hidden="true" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="left" className="max-w-xs p-4">
@@ -252,8 +283,13 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
                   {mode} is more popular.
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
-                  <Button size="lg" onClick={onStart} className="min-w-[200px]">
-                    <Play className="h-5 w-5" />
+                  <Button
+                    size="lg"
+                    onClick={onStart}
+                    className="min-w-[200px]"
+                    aria-label="Start playing the game"
+                  >
+                    <Play className="h-5 w-5" aria-hidden="true" />
                     Start Game
                   </Button>
                   <Button
@@ -261,8 +297,9 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
                     size="lg"
                     onClick={handleRestartTutorial}
                     className="min-w-[200px]"
+                    aria-label="View the tutorial again"
                   >
-                    <EyeIcon className="h-5 w-5" />
+                    <EyeIcon className="h-5 w-5" aria-hidden="true" />
                     View Tutorial Again
                   </Button>
                 </div>
@@ -271,14 +308,25 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
           ) : (
             <Tooltip open={showTutorial && currentStep === 4}>
               <TooltipTrigger asChild>
-                <div id="game-cards" className="w-full max-w-7xl">
+                <div
+                  id="game-cards"
+                  className="w-full max-w-7xl"
+                  role="region"
+                  aria-label="Game preview"
+                >
                   <div className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-8">
-                    <div className="flex aspect-square items-center justify-center rounded-xl bg-muted backdrop-blur-sm">
+                    <div
+                      className="flex aspect-square items-center justify-center rounded-xl bg-muted backdrop-blur-sm"
+                      aria-label={`First ${mode} preview card`}
+                    >
                       <p className="text-xl text-muted-foreground">
                         First {mode}
                       </p>
                     </div>
-                    <div className="flex aspect-square items-center justify-center rounded-xl bg-muted backdrop-blur-sm">
+                    <div
+                      className="flex aspect-square items-center justify-center rounded-xl bg-muted backdrop-blur-sm"
+                      aria-label={`Second ${mode} preview card`}
+                    >
                       <p className="text-xl capitalize text-muted-foreground">
                         Second {mode}
                       </p>

@@ -36,9 +36,15 @@ export default async function Page({ params }: PageProps) {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4">
-      <h1 className="capitalize">Game Mode: {mode}</h1>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+    <div className="flex flex-1 flex-col gap-4 p-4" role="main">
+      <h1 id="page-title" className="capitalize">
+        Select Genre for {mode} Mode
+      </h1>
+      <nav
+        className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
+        aria-labelledby="page-title"
+        role="navigation"
+      >
         {ALLOWED_GENRES.map((genre) => {
           const gradientClass = gradientClasses[genre];
           return (
@@ -46,6 +52,7 @@ export default async function Page({ params }: PageProps) {
               key={genre}
               href={`/game/${mode}/play?genre=${genre}`}
               className="group block aspect-video rounded-lg border-2 border-transparent text-white opacity-90 transition-opacity duration-300 hover:underline hover:opacity-100"
+              aria-label={`Play ${mode} game with ${genre} genre`}
             >
               <Card
                 className={cn(
@@ -55,7 +62,10 @@ export default async function Page({ params }: PageProps) {
                 )}
               >
                 <CardHeader className="relative z-10 flex h-full flex-col justify-end p-0">
-                  <CardTitle className="text-xl font-bold capitalize text-white md:text-2xl lg:text-3xl">
+                  <CardTitle
+                    className="text-xl font-bold capitalize text-white md:text-2xl lg:text-3xl"
+                    aria-hidden="true"
+                  >
                     {genre}
                   </CardTitle>
                 </CardHeader>
@@ -63,7 +73,7 @@ export default async function Page({ params }: PageProps) {
             </Link>
           );
         })}
-      </div>
+      </nav>
     </div>
   );
 }

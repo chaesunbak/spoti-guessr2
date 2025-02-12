@@ -26,6 +26,7 @@ export interface GameState {
   totalRounds: number;
   startTime?: Date;
   endTime?: Date;
+  sessionId: string;
 }
 
 export interface Album {

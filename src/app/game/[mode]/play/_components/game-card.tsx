@@ -7,7 +7,6 @@ import type { GameItem } from "@/types/game";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
-import { useColorPalette } from "@/hooks/use-color-palette";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMuteStore } from "@/stores/use-mute-store";
 
@@ -24,7 +23,6 @@ export function GameCard({ data, onClick }: GameCardProps) {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
-  const { data: colors, loading, error } = useColorPalette(data.image);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -46,7 +44,7 @@ export function GameCard({ data, onClick }: GameCardProps) {
         setIsPlaying(true);
         setUserPaused(false);
       } catch (err) {
-        console.error("오디오 재생 실패:", err);
+        console.error("Audio playback failed:", err);
       }
     }
   };
@@ -57,7 +55,7 @@ export function GameCard({ data, onClick }: GameCardProps) {
       await audioRef.current.play();
       setIsPlaying(true);
     } catch (err) {
-      console.error("오디오 자동 재생 실패:", err);
+      console.error("Auto-play failed:", err);
     }
   };
 
@@ -97,6 +95,15 @@ export function GameCard({ data, onClick }: GameCardProps) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
+      role="button"
+      tabIndex={0}
+      aria-label={`Select ${data.name}`}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
     >
       {/* Background Image with Blur */}
       <div
@@ -108,13 +115,18 @@ export function GameCard({ data, onClick }: GameCardProps) {
           filter: "blur(30px) grayscale(10%)",
           transform: "scale(1.8)",
         }}
+        aria-hidden="true"
       />
-      <div className="relative flex aspect-square max-h-96 w-full items-center justify-center">
+      <div
+        className="relative flex aspect-square max-h-96 w-full items-center justify-center"
+        role="img"
+        aria-label={`Album artwork for ${data.name}`}
+      >
         <Image
           ref={imageRef as any}
           className="absolute left-1/2 top-1/2 z-20 h-auto max-h-[200px] w-auto max-w-[200px] -translate-x-1/2 -translate-y-1/2 transform rounded-md object-contain shadow-md transition duration-200 md:max-h-[250px] md:max-w-[250px] md:shadow-lg"
           src={data.image}
-          alt={data.name}
+          alt={`Album artwork for ${data.name}`}
           width={250}
           height={250}
           unoptimized={true}
@@ -124,10 +136,18 @@ export function GameCard({ data, onClick }: GameCardProps) {
       <div className="z-20">
         <div className="z-20 size-fit text-base font-bold md:text-xl lg:text-3xl">
           {"explicit" in data && data.explicit && (
-            <AlertCircle className="z-20 mr-1 inline-block h-4 w-4" />
+            <AlertCircle
+              className="z-20 mr-1 inline-block h-4 w-4"
+              role="img"
+              aria-label="Explicit content"
+            />
           )}
 
-          <span className="z-20 size-fit text-base font-bold text-white md:text-xl lg:text-2xl">
+          <span
+            className="z-20 size-fit text-base font-bold text-white md:text-xl lg:text-2xl"
+            role="heading"
+            aria-level={3}
+          >
             {data.name}
           </span>
         </div>
@@ -139,9 +159,14 @@ export function GameCard({ data, onClick }: GameCardProps) {
           controls
           src={data.preview_url}
           onTimeUpdate={updateProgress}
+          aria-label={`Audio preview for ${data.name}`}
         />
       )}
-      <div className="z-20 my-2 grid grid-cols-5 text-xl text-white md:my-3 md:text-2xl lg:my-4 lg:text-3xl">
+      <div
+        className="z-20 my-2 grid grid-cols-5 text-xl text-white md:my-3 md:text-2xl lg:my-4 lg:text-3xl"
+        role="region"
+        aria-label="Audio controls"
+      >
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -151,6 +176,21 @@ export function GameCard({ data, onClick }: GameCardProps) {
           onClick={(e) => {
             e.stopPropagation();
             togglePlay();
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label={
+            !data.preview_url
+              ? "No audio preview available"
+              : isPlaying
+                ? "Pause"
+                : "Play"
+          }
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              togglePlay();
+            }
           }}
         >
           <AnimatePresence mode="wait" initial={false}>
@@ -171,6 +211,7 @@ export function GameCard({ data, onClick }: GameCardProps) {
                   },
                 }}
                 className="absolute inset-0 flex items-center justify-center"
+                aria-hidden="true"
               >
                 <X />
               </motion.div>
@@ -191,6 +232,7 @@ export function GameCard({ data, onClick }: GameCardProps) {
                   },
                 }}
                 className="absolute inset-0 flex items-center justify-center"
+                aria-hidden="true"
               >
                 <Pause />
               </motion.div>
@@ -211,18 +253,23 @@ export function GameCard({ data, onClick }: GameCardProps) {
                   },
                 }}
                 className="absolute inset-0 flex items-center justify-center"
+                aria-hidden="true"
               >
                 <Play />
               </motion.div>
             )}
           </AnimatePresence>
-          <div className="invisible">
+          <div className="invisible" aria-hidden="true">
             <Play />
           </div>
         </motion.div>
       </div>
 
-      <Progress value={progress} className="z-20 h-2" />
+      <Progress
+        value={progress}
+        className="z-20 h-2"
+        aria-label={`Audio progress: ${Math.round(progress)}%`}
+      />
     </Card>
   );
 }

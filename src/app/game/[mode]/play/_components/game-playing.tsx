@@ -12,12 +12,12 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { XIcon, Heart, Flame, Crown } from "lucide-react";
 import { useBeforeUnload } from "@/hooks/use-before-unload";
 import Image from "next/image";
+import { sendGAEvent } from "@next/third-parties/google";
 
 interface GamePlayingProps {
   mode: GameMode;
@@ -102,7 +102,7 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
   //Show loading when data is loading
   if (isPending) {
     return (
-      <div className="w-full">
+      <div className="w-full" role="status" aria-label="Loading game data">
         <div className="flex flex-col items-center gap-4">
           <div className="w-full max-w-7xl">
             <div className="flex animate-pulse flex-col items-center gap-4 rounded-xl bg-black/5 p-6 backdrop-blur-sm md:flex-row md:justify-between">
@@ -150,10 +150,15 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
   //Show error when data is error or not found
   if (isError || !data) {
     return (
-      <div className="text-center">
+      <div className="text-center" role="alert">
         <p>Failed to load game data</p>
         {error && <p>{error.message}</p>}
-        <Button onClick={() => refetch()}>Try Again</Button>
+        <Button
+          onClick={() => refetch()}
+          aria-label="Try loading game data again"
+        >
+          Try Again
+        </Button>
       </div>
     );
   }
@@ -167,8 +172,11 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
         ? first.popularity > second.popularity
         : second.popularity > first.popularity;
 
+    let points = 0;
+    let newLives = lives;
+
     if (isCorrect) {
-      const points = 1 + Math.floor(currentStreak / 3); // bonus points for consecutive correct answers
+      points = 1 + Math.floor(currentStreak / 3); // bonus points for consecutive correct answers
       setCurrentStreak((prev) => {
         const newStreak = prev + 1;
         // recover lives every 5 consecutive correct answers
@@ -188,7 +196,28 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
         }
         return newLives;
       });
+      newLives = lives - 1;
     }
+
+    // Send GA event after state updates
+    sendGAEvent("event", "round_completed", {
+      mode,
+      genre,
+      timestamp: new Date().toISOString(),
+      is_correct: isCorrect,
+      points_earned: points,
+      current_streak: isCorrect ? currentStreak + 1 : 0,
+      current_score: isCorrect ? totalScore + points : totalScore,
+      selected_item: selectedIndex === 0 ? first.name : second.name,
+      selected_popularity:
+        selectedIndex === 0 ? first.popularity : second.popularity,
+      other_item: selectedIndex === 0 ? second.name : first.name,
+      other_popularity:
+        selectedIndex === 0 ? second.popularity : first.popularity,
+      popularity_difference: Math.abs(first.popularity - second.popularity),
+      lives_remaining: isCorrect ? lives : newLives,
+      round_number: currentRound + 1,
+    });
 
     setSelectedAnswer({ isCorrect, showNextRound: false });
     setIsCheckingAnswer(true);
@@ -217,8 +246,12 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
   };
 
   return (
-    <div className="w-full">
-      <audio ref={audioRef} className="hidden" />
+    <div
+      className="w-full"
+      role="main"
+      aria-label={`${mode} game - Round ${currentRound + 1}`}
+    >
+      <audio ref={audioRef} className="hidden" aria-hidden="true" />
       <div className="flex flex-col items-center gap-4">
         <div className="w-full max-w-7xl">
           {/* Game Info */}
@@ -230,6 +263,8 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
                   key={currentRound}
                   initial={{ y: -20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
+                  role="status"
+                  aria-label={`Round ${currentRound + 1}`}
                 >
                   Round {currentRound + 1}
                 </motion.h2>
@@ -250,11 +285,15 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
             </div>
             {/* Lives & Score & Streak */}
             <div className="flex w-full items-center justify-between gap-2 md:gap-4 lg:gap-8">
-              <div className="flex flex-col items-center rounded-lg bg-white/10">
+              <div
+                className="flex flex-col items-center rounded-lg bg-white/10"
+                role="status"
+                aria-label={`Lives remaining: ${lives}`}
+              >
                 <span className="text-xs font-medium tracking-wider text-muted-foreground lg:text-sm">
                   LIVES
                 </span>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1" aria-hidden="true">
                   {Array.from({ length: 3 }).map((_, i) => (
                     <motion.span
                       key={`life-${i}`}
@@ -273,12 +312,17 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
                       <Heart
                         className="size-4 md:size-6 lg:size-8"
                         fill={i < lives ? "currentColor" : "none"}
+                        aria-hidden="true"
                       />
                     </motion.span>
                   ))}
                 </div>
               </div>
-              <div className="flex flex-col items-center rounded-lg bg-white/10">
+              <div
+                className="flex flex-col items-center rounded-lg bg-white/10"
+                role="status"
+                aria-label={`Current score: ${totalScore}`}
+              >
                 <span className="text-xs font-medium tracking-wider text-muted-foreground lg:text-sm">
                   SCORE
                 </span>
@@ -291,7 +335,11 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
                   {totalScore}
                 </motion.span>
               </div>
-              <div className="flex flex-col items-center rounded-lg bg-white/10">
+              <div
+                className="flex flex-col items-center rounded-lg bg-white/10"
+                role="status"
+                aria-label={`Current streak: ${currentStreak}`}
+              >
                 <span className="text-xs font-medium tracking-wider text-muted-foreground lg:text-sm">
                   STREAK
                 </span>
@@ -309,6 +357,7 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       className="text-lg font-bold md:text-2xl lg:text-3xl"
+                      aria-hidden="true"
                     >
                       <Flame className="size-4 md:size-6 lg:size-8" />
                     </motion.span>
@@ -320,31 +369,46 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
                 size="icon"
                 className="rounded-full transition-colors hover:bg-destructive hover:text-destructive-foreground"
                 onClick={handleEndGameClick}
+                aria-label="End game"
               >
-                <XIcon className="h-4 w-4" />
-                <span className="sr-only">End Game</span>
+                <XIcon className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
           </div>
         </div>
         <div className="w-full max-w-7xl space-y-6">
-          <div className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-8">
+          <div
+            className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-8"
+            role="region"
+            aria-label="Game cards"
+          >
             {data.map((item, index) => (
               <GameCard
                 key={item.id}
                 data={item}
                 onClick={() => handleCardClick(index)}
+                aria-label={`Select ${item.name}`}
               />
             ))}
           </div>
         </div>
       </div>
 
-      <Dialog open={isCheckingAnswer} onOpenChange={handleDialogClose}>
+      <Dialog
+        open={isCheckingAnswer}
+        onOpenChange={handleDialogClose}
+        aria-label="Answer result"
+      >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-2xl font-bold">
-              {selectedAnswer?.isCorrect ? <>Correct!</> : <>Wrong!</>}
+              {selectedAnswer?.isCorrect ? (
+                <span role="status" aria-live="polite">
+                  Correct!
+                </span>
+              ) : (
+                <span role="alert">Wrong!</span>
+              )}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 pt-4">
@@ -376,28 +440,40 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
               animate={{ opacity: 1 }}
               transition={{ delay: 2.5 }}
               className="block text-center text-muted-foreground"
+              role="status"
+              aria-live="polite"
             >
               {data[0].popularity > data[1].popularity
-                ? `Left song is more popular!`
-                : `Right song is more popular!`}
+                ? `${data[0].name} is more popular!`
+                : `${data[1].name} is more popular!`}
             </motion.span>
           </div>
         </DialogContent>
       </Dialog>
 
       {/* Game Over Dialog */}
-      <Dialog open={showGameOver} onOpenChange={() => {}}>
+      <Dialog
+        open={showGameOver}
+        onOpenChange={() => {}}
+        aria-label="Game over"
+      >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Game Over!</DialogTitle>
             <DialogDescription className="text-lg">
-              Final Score: {totalScore}
-              <br />
-              Max Streak: {currentStreak}
+              <div role="status" aria-label="Final game results">
+                Final Score: {totalScore}
+                <br />
+                Max Streak: {currentStreak}
+              </div>
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex justify-end gap-2">
-            <Button onClick={onEnd} className="w-full">
+            <Button
+              onClick={onEnd}
+              className="w-full"
+              aria-label="Return to main menu"
+            >
               Back to Main
             </Button>
           </DialogFooter>
@@ -407,6 +483,7 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
       <Dialog
         open={showEndGameConfirm}
         onOpenChange={(open) => !open && handleEndGameConfirm(false)}
+        aria-label="Confirm end game"
       >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -420,12 +497,14 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
             <Button
               variant="secondary"
               onClick={() => handleEndGameConfirm(false)}
+              aria-label="Continue playing"
             >
               Continue
             </Button>
             <Button
               variant="destructive"
               onClick={() => handleEndGameConfirm(true)}
+              aria-label="End game and return to main menu"
             >
               End Game
             </Button>

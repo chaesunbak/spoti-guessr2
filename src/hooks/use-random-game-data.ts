@@ -10,6 +10,7 @@ import {
 import { db } from "@/lib/firebase/config";
 import { GameMode, GameGenre } from "@/types/game";
 import { getRandomNumber } from "@/lib/utils";
+import { sendGAEvent } from "@next/third-parties/google";
 
 async function getRandomDocument(mode: GameMode, genre: GameGenre) {
   const randomNum = getRandomNumber(0, 9999);
@@ -24,14 +25,14 @@ async function getRandomDocument(mode: GameMode, genre: GameGenre) {
           collection(db, mode),
           where(randomNumIndex, ">=", randomNum),
           orderBy(randomNumIndex, "asc"),
-          limit(1)
+          limit(1),
         )
       : query(
           collection(db, mode),
           where("genres", "array-contains", genre),
           where(randomNumIndex, ">=", randomNum),
           orderBy(randomNumIndex, "asc"),
-          limit(1)
+          limit(1),
         );
 
   // 두 번째 쿼리 생성 (첫 번째 쿼리가 실패할 경우 사용)
@@ -41,14 +42,14 @@ async function getRandomDocument(mode: GameMode, genre: GameGenre) {
           collection(db, mode),
           where(randomNumIndex, "<=", randomNum),
           orderBy(randomNumIndex, "desc"),
-          limit(1)
+          limit(1),
         )
       : query(
           collection(db, mode),
           where("genres", "array-contains", genre),
           where(randomNumIndex, "<=", randomNum),
           orderBy(randomNumIndex, "desc"),
-          limit(1)
+          limit(1),
         );
 
   try {
@@ -64,6 +65,14 @@ async function getRandomDocument(mode: GameMode, genre: GameGenre) {
     throw new Error("No documents found");
   } catch (error) {
     console.error("Error fetching random document:", error);
+
+    // Send GA event after error
+    sendGAEvent("event", "data_fetch_error", {
+      mode,
+      genre,
+      error: (error as Error).message,
+    });
+
     throw error;
   }
 }

@@ -14,6 +14,8 @@ export function MuteToggle() {
       size="icon"
       onClick={toggleMute}
       title={`${isMuted ? "Click to unmute" : "Click to mute"}`}
+      aria-label={`${isMuted ? "Unmute audio" : "Mute audio"}`}
+      aria-pressed={isMuted}
       className="relative overflow-hidden"
     >
       <AnimatePresence mode="wait" initial={false}>
@@ -34,6 +36,7 @@ export function MuteToggle() {
               },
             }}
             className="absolute inset-0 flex items-center justify-center"
+            aria-hidden="true"
           >
             <VolumeX className="h-5 w-5" />
           </motion.div>
@@ -54,15 +57,18 @@ export function MuteToggle() {
               },
             }}
             className="absolute inset-0 flex items-center justify-center"
+            aria-hidden="true"
           >
             <Volume2 className="h-5 w-5" />
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="invisible">
+      <div className="invisible" aria-hidden="true">
         <Volume2 className="h-5 w-5" />
       </div>
-      <span className="sr-only">{isMuted ? "Muted" : "Unmuted"}</span>
+      <span className="sr-only">
+        {isMuted ? "Audio is muted" : "Audio is playing"}
+      </span>
     </Button>
   );
 }

@@ -7,13 +7,53 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import QueryClinetProvider from "@/components/providers/query-client-provider";
 import { cookies } from "next/headers";
 import { Toaster } from "@/components/ui/toaster";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
-  title: "Spoti-Guessr : Guess Higher or Lower",
-  description: "Music Popularity Guess Game",
+  title: {
+    default: "Spoti-Guessr | Guess What's trending on Spotify",
+    template: "%s | Spoti-Guessr",
+  },
+  description:
+    "Compare songs, artists, and albums to guess which one is more popular on Spotify. Test your knowledge of music trends and compete for high scores!",
+  keywords: [
+    "Spotify",
+    "music game",
+    "K-pop",
+    "music quiz",
+    "popularity game",
+    "music trends",
+    "Spotify game",
+    "higher or lower",
+  ],
+  authors: [{ name: "Chaesunbak" }],
+  creator: "Chaesunbak",
+  publisher: "Chaesunbak",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://spoti-guessr.vercel.app",
+    title: "Spoti-Guessr | Guess What's trending on Spotify",
+    description:
+      "Compare songs, artists, and albums to guess which one is more popular on Spotify. Test your knowledge of music trends!",
+    siteName: "Spoti-Guessr",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Spoti-Guessr | Guess What's trending on Spotify",
+    description:
+      "Compare songs, artists, and albums to guess which one is more popular on Spotify. Test your knowledge of music trends!",
+  },
   icons: {
     icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
   },
+  manifest: "/site.webmanifest",
 };
 
 export default async function RootLayout({
@@ -24,8 +64,11 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
+  const GA_ID = process.env.NEXT_PUBLIC_GID;
+
   return (
     <html lang="en" suppressHydrationWarning>
+      {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
       <body className="bg-background text-foreground antialiased">
         {/* IF TOO MAN PROVIDERS, CHAGNE TO GLOBAL PROVIDERS */}
         <QueryClinetProvider>

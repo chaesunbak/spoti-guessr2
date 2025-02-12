@@ -6,6 +6,7 @@ import {
   GameGenre,
 } from "@/types/game";
 import { GameContainer } from "@/app/game/[mode]/play/_components/game-container";
+import { Metadata } from "next";
 
 interface PageProps {
   params: Promise<{
@@ -14,6 +15,20 @@ interface PageProps {
   searchParams: Promise<{
     genre?: string;
   }>;
+}
+
+// 동적 메타데이터 생성
+export async function generateMetadata({
+  params,
+  searchParams,
+}: PageProps): Promise<Metadata> {
+  const mode = (await params).mode;
+  const genre = (await searchParams).genre;
+
+  return {
+    title: `Playing ${mode} - ${genre || "All"} | Spoti-Guessr`,
+    description: `Play Spoti-Guessr ${mode} game with ${genre || "all"} genre. Guess which ${mode} is more popular on Spotify!`,
+  };
 }
 
 export default async function Page({ params, searchParams }: PageProps) {
@@ -31,5 +46,9 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   const validGenre = genre as GameGenre;
 
-  return <GameContainer mode={mode} genre={validGenre} />;
+  return (
+    <div role="main" aria-label={`${mode} game with ${validGenre} genre`}>
+      <GameContainer mode={mode} genre={validGenre} />
+    </div>
+  );
 }

@@ -14,6 +14,27 @@ import {
 
 export function ThemeToggle() {
   const { setTheme, theme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <Button
+        variant="outline"
+        size="icon"
+        className="relative overflow-hidden"
+        aria-label="Loading theme switcher"
+        disabled
+      >
+        <div className="invisible" aria-hidden="true">
+          <Sun className="h-[1.2rem] w-[1.2rem]" />
+        </div>
+      </Button>
+    );
+  }
 
   return (
     <DropdownMenu>
@@ -21,11 +42,12 @@ export function ThemeToggle() {
         <Button
           variant="outline"
           size="icon"
-          title="Select theme mode"
           className="relative overflow-hidden"
+          aria-label={`Current theme: ${theme}. Click to show theme options`}
+          title={`Current theme: ${theme}. Click to show theme options`}
         >
           <AnimatePresence mode="wait" initial={false}>
-            {theme !== "dark" ? (
+            {theme === "light" ? (
               <motion.div
                 key="light"
                 initial={{ opacity: 0, scale: 0.3 }}
@@ -42,6 +64,7 @@ export function ThemeToggle() {
                   },
                 }}
                 className="absolute inset-0 flex items-center justify-center"
+                aria-hidden="true"
               >
                 <Sun className="h-[1.2rem] w-[1.2rem]" />
               </motion.div>
@@ -62,34 +85,51 @@ export function ThemeToggle() {
                   },
                 }}
                 className="absolute inset-0 flex items-center justify-center"
+                aria-hidden="true"
               >
                 <Moon className="h-[1.2rem] w-[1.2rem]" />
               </motion.div>
             )}
           </AnimatePresence>
-          <div className="invisible">
+          <div className="invisible" aria-hidden="true">
             <Sun className="h-[1.2rem] w-[1.2rem]" />
           </div>
-          <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           onClick={() => setTheme("light")}
-          title="Switch to Light Theme"
+          onSelect={() => setTheme("light")}
+          role="menuitemradio"
+          aria-checked={theme === "light"}
+          aria-label="Switch to light theme"
         >
+          <Sun className="mr-2 h-4 w-4" aria-hidden="true" />
           Light
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme("dark")}
-          title="Switch to Dark Theme"
+          onSelect={() => setTheme("dark")}
+          role="menuitemradio"
+          aria-checked={theme === "dark"}
+          aria-label="Switch to dark theme"
         >
+          <Moon className="mr-2 h-4 w-4" aria-hidden="true" />
           Dark
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme("system")}
-          title="Use System Default Theme"
+          onSelect={() => setTheme("system")}
+          role="menuitemradio"
+          aria-checked={theme === "system"}
+          aria-label="Use system theme"
         >
+          <span
+            className="mr-2 flex h-4 w-4 items-center justify-center"
+            aria-hidden="true"
+          >
+            💻
+          </span>
           System
         </DropdownMenuItem>
       </DropdownMenuContent>
