@@ -14,7 +14,7 @@ export function UserProfile() {
     <DropdownMenu>
       <DropdownMenuTrigger className="outline-none">
         <Avatar>
-          <AvatarImage src="/avatar.png" alt="User" />
+          <AvatarImage src="/logo.png" alt="User" />
           <AvatarFallback>
             <User className="h-5 w-5" />
           </AvatarFallback>
