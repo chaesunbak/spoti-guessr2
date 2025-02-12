@@ -36,12 +36,12 @@ export default async function Page({ params }: PageProps) {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4" role="main">
+    <div className="flex flex-1 flex-col gap-2 p-4 lg:gap-4" role="main">
       <h1 id="page-title" className="capitalize">
         Select Genre for {mode} Mode
       </h1>
       <nav
-        className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
+        className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-4"
         aria-labelledby="page-title"
         role="navigation"
       >
@@ -56,7 +56,7 @@ export default async function Page({ params }: PageProps) {
             >
               <Card
                 className={cn(
-                  "relative h-full w-full overflow-hidden p-6 transition-all duration-300",
+                  "relative h-full w-full overflow-hidden p-4 transition-all duration-300 lg:p-6",
                   gradientClass ||
                     "bg-gradient-to-br from-gray-500 via-slate-500 to-zinc-500", // Fallback gradient
                 )}

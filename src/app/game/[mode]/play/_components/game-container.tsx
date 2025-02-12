@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GameMode, GameGenre, GameState } from "@/types/game";
 import { GameReady } from "@/app/game/[mode]/play/_components/game-ready";
 import { GamePlaying } from "@/app/game/[mode]/play/_components/game-playing";
 import { GameFinished } from "@/app/game/[mode]/play/_components/game-finished";
 import { sendGAEvent } from "@next/third-parties/google";
+import { v4 as uuidv4 } from "uuid";
 
 interface GameContainerProps {
   mode: GameMode;
@@ -13,19 +14,19 @@ interface GameContainerProps {
 }
 
 export function GameContainer({ mode, genre }: GameContainerProps) {
-  const [gameState, setGameState] = useState<GameState>({
+  const [gameState, setGameState] = useState<GameState>(() => ({
     status: "ready",
     score: 0,
     currentRound: 0,
     totalRounds: Infinity,
-    sessionId: crypto.randomUUID(),
-  });
+    startTime: new Date(),
+    sessionId: uuidv4(),
+  }));
 
   const startGame = () => {
     setGameState({
       ...gameState,
       status: "playing",
-      startTime: new Date(),
       currentRound: 1,
     });
 
@@ -70,7 +71,13 @@ export function GameContainer({ mode, genre }: GameContainerProps) {
   };
 
   const restartGame = () => {
-    const newSessionId = crypto.randomUUID();
+    setGameState({
+      status: "ready",
+      score: 0,
+      currentRound: 0,
+      totalRounds: Infinity,
+      sessionId: uuidv4(),
+    });
 
     sendGAEvent("event", "game_restarted", {
       mode: mode.toString(),
@@ -79,14 +86,6 @@ export function GameContainer({ mode, genre }: GameContainerProps) {
       session_id: gameState.sessionId,
       previous_score: gameState.score,
       previous_rounds: gameState.currentRound,
-    });
-
-    setGameState({
-      status: "ready",
-      score: 0,
-      currentRound: 0,
-      totalRounds: Infinity,
-      sessionId: newSessionId,
     });
   };
 
@@ -102,7 +101,7 @@ export function GameContainer({ mode, genre }: GameContainerProps) {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto h-full p-4">
       {gameState.status === "ready" && (
         <GameReady mode={mode} genre={genre} onStart={startGame} />
       )}

@@ -5,9 +5,9 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4">
-      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        <section className="rounded-xl bg-muted/50 p-8 transition-all duration-300 hover:bg-muted/70 md:col-span-2 md:row-span-2">
+    <div className="flex flex-1 flex-col gap-4 p-2 lg:p-4">
+      <div className="grid h-full w-full auto-rows-min gap-4 md:grid-cols-3">
+        <section className="rounded-xl bg-muted/50 p-2 transition-all duration-300 hover:bg-muted/70 md:col-span-2 md:row-span-2 md:p-4 lg:p-6">
           <div className="flex h-full flex-col justify-between gap-8">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
@@ -37,7 +37,7 @@ export default function Home() {
               </p>
             </div>
             <div
-              className="flex gap-2 lg:gap-4"
+              className="flex flex-col gap-2 lg:flex-row lg:gap-4"
               role="navigation"
               aria-label="Main actions"
             >
@@ -62,7 +62,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="aspect-video rounded-xl bg-muted/50 p-6 transition-all duration-300 hover:bg-muted/70">
+        <section className="aspect-video rounded-xl bg-muted/50 p-2 transition-all duration-300 hover:bg-muted/70 md:p-4 lg:p-6">
           <div className="flex h-full flex-col justify-between">
             <h3 className="mb-2">Release Notes</h3>
             <div className="scrollbar-none flex-1 space-y-1 overflow-y-auto text-xs text-muted-foreground md:text-sm">
@@ -99,7 +99,7 @@ export default function Home() {
         />
       </div>
       <div
-        className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min"
+        className="hidden min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min"
         aria-hidden="true"
       />
     </div>

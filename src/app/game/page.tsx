@@ -34,10 +34,10 @@ const gameModeConfig = {
 
 export default function GamePage() {
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4" role="main">
+    <div className="flex flex-1 flex-col gap-2 p-4 lg:gap-4" role="main">
       <h1 id="page-title">Select Your Game Mode</h1>
       <nav
-        className="grid auto-rows-min gap-4 md:grid-cols-3"
+        className="grid auto-rows-min gap-2 md:grid-cols-3 lg:gap-4"
         aria-labelledby="page-title"
       >
         {ALLOWED_MODES.map((mode) => {

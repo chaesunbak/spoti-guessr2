@@ -46,9 +46,5 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   const validGenre = genre as GameGenre;
 
-  return (
-    <div role="main" aria-label={`${mode} game with ${validGenre} genre`}>
-      <GameContainer mode={mode} genre={validGenre} />
-    </div>
-  );
+  return <GameContainer mode={mode} genre={validGenre} />;
 }

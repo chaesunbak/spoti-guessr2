@@ -13,35 +13,53 @@ import { useMuteStore } from "@/stores/use-mute-store";
 interface GameCardProps {
   data: GameItem;
   onClick?: () => void;
+  tabIndex?: number;
+  autoFocus?: boolean;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+  "data-card-index"?: number;
+  "aria-label"?: string;
+  isPreviewPlaying?: boolean;
+  onPreviewStateChange?: (isPlaying: boolean) => void;
+  audioRef?: React.RefObject<HTMLAudioElement>;
 }
 
-export function GameCard({ data, onClick }: GameCardProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
+export function GameCard({
+  data,
+  onClick,
+  tabIndex = 0,
+  autoFocus,
+  onKeyDown,
+  "data-card-index": dataCardIndex,
+  "aria-label": ariaLabel,
+  isPreviewPlaying,
+  onPreviewStateChange,
+  audioRef,
+}: GameCardProps) {
   const [userPaused, setUserPaused] = useState(false);
   const [progress, setProgress] = useState(0);
   const { isMuted } = useMuteStore();
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
-    if (audioRef.current) {
+    if (audioRef?.current) {
       audioRef.current.muted = isMuted;
     }
-  }, [isMuted]);
+  }, [isMuted, audioRef]);
 
   const togglePlay = async (e?: React.MouseEvent) => {
     e?.stopPropagation();
-    if (!audioRef.current) return;
+    if (!audioRef?.current || !data.preview_url) return;
 
-    if (isPlaying) {
+    if (isPreviewPlaying) {
       audioRef.current.pause();
-      setIsPlaying(false);
+      onPreviewStateChange?.(false);
       setUserPaused(true);
     } else {
       try {
+        audioRef.current.src = data.preview_url;
         await audioRef.current.play();
-        setIsPlaying(true);
+        onPreviewStateChange?.(true);
         setUserPaused(false);
       } catch (err) {
         console.error("Audio playback failed:", err);
@@ -50,24 +68,31 @@ export function GameCard({ data, onClick }: GameCardProps) {
   };
 
   const handleMouseEnter = async () => {
-    if (!audioRef.current || isPlaying || userPaused) return;
+    if (
+      !audioRef?.current ||
+      isPreviewPlaying ||
+      userPaused ||
+      !data.preview_url
+    )
+      return;
     try {
+      audioRef.current.src = data.preview_url;
       await audioRef.current.play();
-      setIsPlaying(true);
+      onPreviewStateChange?.(true);
     } catch (err) {
       console.error("Auto-play failed:", err);
     }
   };
 
   const handleMouseLeave = () => {
-    if (!audioRef.current || !isPlaying || userPaused) return;
+    if (!audioRef?.current || !isPreviewPlaying || userPaused) return;
     audioRef.current.pause();
     audioRef.current.currentTime = 0;
-    setIsPlaying(false);
+    onPreviewStateChange?.(false);
   };
 
   const updateProgress = () => {
-    if (audioRef.current) {
+    if (audioRef?.current) {
       const { currentTime, duration } = audioRef.current;
       setProgress((currentTime / duration) * 100);
     }
@@ -75,11 +100,11 @@ export function GameCard({ data, onClick }: GameCardProps) {
 
   // Add event listener for audio ended
   useEffect(() => {
-    const audio = audioRef.current;
+    const audio = audioRef?.current;
     if (!audio) return;
 
     const handleEnded = () => {
-      setIsPlaying(false);
+      setUserPaused(true);
       audio.currentTime = 0;
     };
 
@@ -87,23 +112,20 @@ export function GameCard({ data, onClick }: GameCardProps) {
     return () => {
       audio.removeEventListener("ended", handleEnded);
     };
-  }, []);
+  }, [audioRef]);
 
   return (
     <Card
-      className="group relative flex max-h-[22rem] cursor-pointer flex-col justify-between overflow-hidden rounded-xl p-3 opacity-100 transition-all duration-300 md:max-h-none md:p-4 lg:p-5"
+      className="group relative flex max-h-[22rem] cursor-pointer flex-col justify-between overflow-hidden rounded-xl p-3 opacity-100 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:max-h-none md:p-4 lg:p-5"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
       role="button"
-      tabIndex={0}
-      aria-label={`Select ${data.name}`}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onClick?.();
-        }
-      }}
+      tabIndex={tabIndex}
+      autoFocus={autoFocus}
+      onKeyDown={onKeyDown}
+      data-card-index={dataCardIndex}
+      aria-label={ariaLabel || `Select ${data.name}`}
     >
       {/* Background Image with Blur */}
       <div
@@ -124,7 +146,7 @@ export function GameCard({ data, onClick }: GameCardProps) {
       >
         <Image
           ref={imageRef as any}
-          className="absolute left-1/2 top-1/2 z-20 h-auto max-h-[200px] w-auto max-w-[200px] -translate-x-1/2 -translate-y-1/2 transform rounded-md object-contain shadow-md transition duration-200 md:max-h-[250px] md:max-w-[250px] md:shadow-lg"
+          className="absolute left-1/2 top-1/2 z-20 h-auto max-h-[150px] w-auto max-w-[150px] -translate-x-1/2 -translate-y-1/2 transform rounded-md object-contain shadow-md transition duration-200 sm:max-h-[175px] sm:max-w-[175px] md:max-h-[200px] md:max-w-[200px] md:shadow-lg lg:max-h-[250px] lg:max-w-[250px]"
           src={data.image}
           alt={`Album artwork for ${data.name}`}
           width={250}
@@ -182,7 +204,7 @@ export function GameCard({ data, onClick }: GameCardProps) {
           aria-label={
             !data.preview_url
               ? "No audio preview available"
-              : isPlaying
+              : isPreviewPlaying
                 ? "Pause"
                 : "Play"
           }
@@ -215,7 +237,7 @@ export function GameCard({ data, onClick }: GameCardProps) {
               >
                 <X />
               </motion.div>
-            ) : isPlaying ? (
+            ) : isPreviewPlaying ? (
               <motion.div
                 key="pause"
                 initial={{ opacity: 0, scale: 0.3 }}

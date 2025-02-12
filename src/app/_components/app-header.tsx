@@ -8,7 +8,10 @@ import Link from "next/link";
 
 export function AppHeader() {
   return (
-    <header className="flex h-14 items-center border-b px-4" role="banner">
+    <header
+      className="flex h-14 items-center gap-1 border-b px-4"
+      role="banner"
+    >
       <div className="flex-1" aria-hidden="true" /> {/* Left spacing */}
       {/* Center search input */}
       <div className="flex w-full max-w-xl items-center" role="search">

@@ -18,6 +18,7 @@ import { XIcon, Heart, Flame, Crown } from "lucide-react";
 import { useBeforeUnload } from "@/hooks/use-before-unload";
 import Image from "next/image";
 import { sendGAEvent } from "@next/third-parties/google";
+import { useTheme } from "next-themes";
 
 interface GamePlayingProps {
   mode: GameMode;
@@ -43,7 +44,7 @@ function PopularityCounter({
   }, [to]);
 
   return (
-    <div className="flex items-center gap-2">
+    <span className="flex items-center gap-2">
       {isWinner && (
         <motion.span
           initial={{ opacity: 0, scale: 0.5 }}
@@ -57,7 +58,7 @@ function PopularityCounter({
       <motion.span className="font-bold">{rounded}</motion.span>
 
       <span>points</span>
-    </div>
+    </span>
   );
 }
 
@@ -78,6 +79,8 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
   } | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [showEndGameConfirm, setShowEndGameConfirm] = useState(false);
+  const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
+  const { theme } = useTheme();
 
   //Warn when user try to leave the page
   useBeforeUnload(!showGameOver);
@@ -85,6 +88,9 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
   //Play audio when answer is checking
   useEffect(() => {
     if (isCheckingAnswer && data) {
+      // Stop any preview audio first
+      setIsPreviewPlaying(false);
+
       const winner =
         data[0].popularity > data[1].popularity ? data[0] : data[1];
       if (audioRef.current && winner.preview_url) {
@@ -166,6 +172,13 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
   const handleCardClick = (selectedIndex: number) => {
     if (isCheckingAnswer) return;
 
+    // Stop any playing preview audio before showing result
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    setIsPreviewPlaying(false);
+
     const [first, second] = data;
     const isCorrect =
       selectedIndex === 0
@@ -193,6 +206,7 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
         const newLives = prev - 1;
         if (newLives <= 0) {
           setShowGameOver(true);
+          setIsCheckingAnswer(false); // Hide the checking answer dialog when game is over
         }
         return newLives;
       });
@@ -219,8 +233,11 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
       round_number: currentRound + 1,
     });
 
-    setSelectedAnswer({ isCorrect, showNextRound: false });
-    setIsCheckingAnswer(true);
+    // Only show the checking answer dialog if the game is not over
+    if (!showGameOver) {
+      setSelectedAnswer({ isCorrect, showNextRound: false });
+      setIsCheckingAnswer(true);
+    }
   };
 
   //Handle dialog close
@@ -251,7 +268,12 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
       role="main"
       aria-label={`${mode} game - Round ${currentRound + 1}`}
     >
-      <audio ref={audioRef} className="hidden" aria-hidden="true" />
+      <audio
+        ref={audioRef}
+        className="hidden"
+        aria-hidden="true"
+        onEnded={() => setIsPreviewPlaying(false)}
+      />
       <div className="flex flex-col items-center gap-4">
         <div className="w-full max-w-7xl">
           {/* Game Info */}
@@ -274,7 +296,11 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
                     Choose the more popular {mode} on
                   </p>
                   <Image
-                    src="/spotify-logo.png"
+                    src={
+                      theme === "dark"
+                        ? "/spotify-logo-white.png"
+                        : "/spotify-logo-black.png"
+                    }
                     alt="Spotify"
                     width={80}
                     height={24}
@@ -286,7 +312,7 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
             {/* Lives & Score & Streak */}
             <div className="flex w-full items-center justify-between gap-2 md:gap-4 lg:gap-8">
               <div
-                className="flex flex-col items-center rounded-lg bg-white/10"
+                className="flex flex-col items-center rounded-lg bg-white/10 p-1"
                 role="status"
                 aria-label={`Lives remaining: ${lives}`}
               >
@@ -319,7 +345,7 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
                 </div>
               </div>
               <div
-                className="flex flex-col items-center rounded-lg bg-white/10"
+                className="flex flex-col items-center rounded-lg bg-white/10 p-1"
                 role="status"
                 aria-label={`Current score: ${totalScore}`}
               >
@@ -336,7 +362,7 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
                 </motion.span>
               </div>
               <div
-                className="flex flex-col items-center rounded-lg bg-white/10"
+                className="flex flex-col items-center rounded-lg bg-white/10 p-1"
                 role="status"
                 aria-label={`Current streak: ${currentStreak}`}
               >
@@ -359,7 +385,7 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
                       className="text-lg font-bold md:text-2xl lg:text-3xl"
                       aria-hidden="true"
                     >
-                      <Flame className="size-4 md:size-6 lg:size-8" />
+                      <Flame className="size-4 fill-red-400 text-red-400 md:size-6 lg:size-8" />
                     </motion.span>
                   )}
                 </div>
@@ -387,7 +413,33 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
                 key={item.id}
                 data={item}
                 onClick={() => handleCardClick(index)}
+                isPreviewPlaying={isPreviewPlaying}
+                onPreviewStateChange={setIsPreviewPlaying}
+                audioRef={audioRef as React.RefObject<HTMLAudioElement>}
                 aria-label={`Select ${item.name}`}
+                tabIndex={0}
+                autoFocus={index === 0}
+                onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleCardClick(index);
+                  } else if (e.key === "ArrowRight" && index === 0) {
+                    e.preventDefault();
+                    (
+                      document.querySelector(
+                        `[data-card-index="1"]`,
+                      ) as HTMLElement
+                    )?.focus();
+                  } else if (e.key === "ArrowLeft" && index === 1) {
+                    e.preventDefault();
+                    (
+                      document.querySelector(
+                        `[data-card-index="0"]`,
+                      ) as HTMLElement
+                    )?.focus();
+                  }
+                }}
+                data-card-index={index}
               />
             ))}
           </div>
@@ -410,44 +462,46 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
                 <span role="alert">Wrong!</span>
               )}
             </DialogTitle>
+            <DialogDescription>
+              <span className="space-y-4 pt-4">
+                <motion.span
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center justify-between"
+                >
+                  <span>{data[0].name}</span>
+                  <PopularityCounter
+                    to={data[0].popularity}
+                    isWinner={data[0].popularity > data[1].popularity}
+                  />
+                </motion.span>
+                <motion.span
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex items-center justify-between"
+                >
+                  <span>{data[1].name}</span>
+                  <PopularityCounter
+                    to={data[1].popularity}
+                    isWinner={data[1].popularity > data[0].popularity}
+                  />
+                </motion.span>
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 2.5 }}
+                  className="block text-center text-muted-foreground"
+                  role="status"
+                  aria-live="polite"
+                >
+                  {data[0].popularity > data[1].popularity
+                    ? `${data[0].name} is more popular!`
+                    : `${data[1].name} is more popular!`}
+                </motion.span>
+              </span>
+            </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 pt-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center justify-between"
-            >
-              <span>{data[0].name}</span>
-              <PopularityCounter
-                to={data[0].popularity}
-                isWinner={data[0].popularity > data[1].popularity}
-              />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex items-center justify-between"
-            >
-              <span>{data[1].name}</span>
-              <PopularityCounter
-                to={data[1].popularity}
-                isWinner={data[1].popularity > data[0].popularity}
-              />
-            </motion.div>
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 2.5 }}
-              className="block text-center text-muted-foreground"
-              role="status"
-              aria-live="polite"
-            >
-              {data[0].popularity > data[1].popularity
-                ? `${data[0].name} is more popular!`
-                : `${data[1].name} is more popular!`}
-            </motion.span>
-          </div>
         </DialogContent>
       </Dialog>
 
@@ -461,11 +515,11 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Game Over!</DialogTitle>
             <DialogDescription className="text-lg">
-              <div role="status" aria-label="Final game results">
+              <span role="status" aria-label="Final game results">
                 Final Score: {totalScore}
                 <br />
                 Max Streak: {currentStreak}
-              </div>
+              </span>
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex justify-end gap-2">

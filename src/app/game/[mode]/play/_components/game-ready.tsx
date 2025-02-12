@@ -8,6 +8,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useTheme } from "next-themes";
+import Image from "next/image";
 
 interface GameReadyProps {
   mode: GameMode;
@@ -78,6 +80,7 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
     const completed = localStorage.getItem(TUTORIAL_STORAGE_KEY);
     return !!completed;
   });
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (currentStep >= tutorialSteps.length) {
@@ -150,12 +153,12 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
   return (
     <TooltipProvider>
       <div
-        className="w-full"
+        className="h-full w-full"
         role="region"
         aria-label="Game preparation screen"
       >
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-full max-w-7xl">
+        <div className="flex h-full flex-col items-center gap-4">
+          <div className="flex w-full max-w-7xl flex-col">
             <div className="flex flex-col items-start justify-between gap-2 rounded-xl bg-muted p-4 backdrop-blur-sm md:gap-4 lg:flex-row lg:items-center lg:gap-8 lg:p-6">
               <div className="flex w-full items-center gap-4">
                 <Tooltip open={showTutorial && currentStep === 0}>
@@ -168,7 +171,18 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
                     >
                       <h2>Round</h2>
                       <p className="text-muted-foreground">
-                        Choose the more popular {mode} on Spotify
+                        Choose the more popular {mode} on{" "}
+                        <Image
+                          src={
+                            theme === "dark"
+                              ? "/spotify-logo-white.png"
+                              : "/spotify-logo-black.png"
+                          }
+                          alt="Spotify"
+                          width={80}
+                          height={24}
+                          className="relative -top-[1px] inline-block"
+                        />
                       </p>
                     </div>
                   </TooltipTrigger>
@@ -182,7 +196,7 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
                   <TooltipTrigger asChild>
                     <div
                       id="lives-display"
-                      className="flex flex-col items-center rounded-lg bg-white/10"
+                      className="flex flex-col items-center rounded-lg bg-white/10 p-1"
                       role="status"
                       aria-label="Lives remaining: 3"
                     >
@@ -212,7 +226,7 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
                   <TooltipTrigger asChild>
                     <div
                       id="score-display"
-                      className="flex flex-col items-center rounded-lg bg-white/10"
+                      className="flex flex-col items-center rounded-lg bg-white/10 p-1"
                       role="status"
                       aria-label="Current score: 0"
                     >
@@ -235,7 +249,7 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
                   <TooltipTrigger asChild>
                     <div
                       id="streak-display"
-                      className="flex flex-col items-center rounded-lg bg-white/10"
+                      className="flex flex-col items-center rounded-lg bg-white/10 p-1"
                       role="status"
                       aria-label="Current streak: 0"
                     >
@@ -273,8 +287,8 @@ export function GameReady({ mode, genre, onStart }: GameReadyProps) {
             </div>
           </div>
           {!showTutorial && tutorialCompleted ? (
-            <div className="w-full max-w-7xl rounded-xl bg-muted backdrop-blur-sm">
-              <div className="flex aspect-[2/1] flex-col items-center justify-center gap-4 p-6">
+            <div className="h-full w-full max-w-7xl rounded-xl bg-muted backdrop-blur-sm">
+              <div className="flex h-full flex-col items-center justify-center gap-4 p-6">
                 <h2 className="text-2xl font-bold md:text-3xl">
                   Ready to Play?
                 </h2>
