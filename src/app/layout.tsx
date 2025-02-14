@@ -82,7 +82,7 @@ export default async function RootLayout({
               <AppSidebar />
               <div className="w-full">
                 <AppHeader />
-                <main className="h-full">{children}</main>
+                <main className="min-h-[calc(100vh-3.5rem)]">{children}</main>
                 <Toaster />
               </div>
             </SidebarProvider>

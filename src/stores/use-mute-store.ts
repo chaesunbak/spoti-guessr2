@@ -14,6 +14,6 @@ export const useMuteStore = create<MuteState>()(
     }),
     {
       name: "mute-storage",
-    }
-  )
+    },
+  ),
 );

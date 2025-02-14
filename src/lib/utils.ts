@@ -58,3 +58,61 @@ export function shuffleArray<T>(array: T[]): T[] {
   }
   return shuffled;
 }
+
+const adjectives = [
+  "Happy",
+  "Clever",
+  "Brave",
+  "Swift",
+  "Bright",
+  "Wild",
+  "Calm",
+  "Epic",
+  "Noble",
+  "Wise",
+  "Mighty",
+  "Silent",
+  "Gentle",
+  "Bold",
+  "Mystic",
+  "Cosmic",
+  "Radiant",
+  "Fierce",
+  "Mellow",
+  "Vivid",
+];
+
+const nouns = [
+  "Panda",
+  "Tiger",
+  "Eagle",
+  "Wolf",
+  "Phoenix",
+  "Dragon",
+  "Falcon",
+  "Lion",
+  "Dolphin",
+  "Bear",
+  "Hawk",
+  "Fox",
+  "Owl",
+  "Lynx",
+  "Raven",
+  "Shark",
+  "Deer",
+  "Cobra",
+  "Panther",
+  "Whale",
+];
+
+/**
+ * 랜덤한 영어 닉네임을 생성합니다.
+ * 형용사와 명사를 조합하여 "HappyPanda"와 같은 형식의 닉네임을 만듭니다.
+ * @returns 생성된 랜덤 닉네임
+ */
+export function getRandomNickname(): string {
+  const randomAdjective =
+    adjectives[Math.floor(Math.random() * adjectives.length)];
+  const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
+  return `${randomAdjective}${randomNoun}`;
+}
