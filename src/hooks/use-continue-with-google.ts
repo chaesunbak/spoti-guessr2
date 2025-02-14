@@ -1,11 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  signInWithPopup,
-  signInWithRedirect,
-  GoogleAuthProvider,
-} from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/config";
 import { useAuthStore } from "@/stores/use-auth-store";
@@ -13,8 +9,6 @@ import { getRandomNickname } from "@/lib/utils";
 import type { User } from "@/types/user";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { useIsMobile } from "@/hooks/use-mobile";
-
 export const useContinueWithGoogle = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
@@ -22,18 +16,11 @@ export const useContinueWithGoogle = () => {
   const provider = new GoogleAuthProvider();
   const { toast } = useToast();
   const router = useRouter();
-  const isMobile = useIsMobile();
 
   const continueWithGoogle = async () => {
     setLoading(true);
     try {
-      let result;
-
-      if (isMobile) {
-        result = await signInWithRedirect(auth, provider);
-      } else {
-        result = await signInWithPopup(auth, provider);
-      }
+      const result = await signInWithPopup(auth, provider);
 
       const newUser = result.user;
       const userRef = doc(db, "users", newUser.uid);
