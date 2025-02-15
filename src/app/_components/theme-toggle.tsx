@@ -63,7 +63,7 @@ export function ThemeToggle() {
                     times: [0, 0.6, 1],
                   },
                 }}
-                className="flex items-center justify-center"
+                className="absolute inset-0 flex items-center justify-center"
                 aria-hidden="true"
               >
                 <Sun className="h-[1.2rem] w-[1.2rem]" />
@@ -84,7 +84,7 @@ export function ThemeToggle() {
                     times: [0, 0.6, 1],
                   },
                 }}
-                className="flex items-center justify-center"
+                className="absolute inset-0 flex items-center justify-center"
                 aria-hidden="true"
               >
                 <Moon className="h-[1.2rem] w-[1.2rem]" />
