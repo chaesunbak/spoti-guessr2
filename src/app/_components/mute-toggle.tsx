@@ -35,7 +35,7 @@ export function MuteToggle() {
                 times: [0, 0.6, 1],
               },
             }}
-            className="absolute inset-0 flex items-center justify-center"
+            className="flex items-center justify-center"
             aria-hidden="true"
           >
             <VolumeX className="h-5 w-5" />
@@ -56,7 +56,7 @@ export function MuteToggle() {
                 times: [0, 0.6, 1],
               },
             }}
-            className="absolute inset-0 flex items-center justify-center"
+            className="flex items-center justify-center"
             aria-hidden="true"
           >
             <Volume2 className="h-5 w-5" />

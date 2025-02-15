@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef } from "react";
 import { GameMode, GameGenre } from "@/types/game";
 import { Button } from "@/components/ui/button";
-import { GameCard } from "./game-card";
+import { GameCard } from "@/app/game/[mode]/play/_components/game-card";
 import { useRandomGameData } from "@/hooks/use-random-game-data";
-import { motion, animate, useMotionValue, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Dialog,
   DialogContent,
@@ -16,50 +16,15 @@ import {
 } from "@/components/ui/dialog";
 import { XIcon, Heart, Flame, Crown } from "lucide-react";
 import { useBeforeUnload } from "@/hooks/use-before-unload";
-import Image from "next/image";
 import { sendGAEvent } from "@next/third-parties/google";
-import { useTheme } from "next-themes";
+import { SpotifyLogo } from "@/components/spotify-logo";
+import { PopularityCounter } from "@/app/game/[mode]/play/_components/popularity-couter";
 
 interface GamePlayingProps {
   mode: GameMode;
   genre: GameGenre;
   onScore: (points: number) => void;
   onEnd: () => void;
-}
-
-function PopularityCounter({
-  to,
-  isWinner,
-}: {
-  to: number;
-  isWinner: boolean;
-}) {
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, Math.round);
-
-  useEffect(() => {
-    count.set(0);
-    const controls = animate(count, to, { duration: 2 });
-    return () => controls.stop();
-  }, [to]);
-
-  return (
-    <span className="flex items-center gap-2">
-      {isWinner && (
-        <motion.span
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 2 }}
-          className="text-yellow-500"
-        >
-          <Crown className="h-6 w-6" />
-        </motion.span>
-      )}
-      <motion.span className="font-bold">{rounded}</motion.span>
-
-      <span>points</span>
-    </span>
-  );
 }
 
 export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
@@ -77,33 +42,11 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
     isCorrect: boolean;
     showNextRound: boolean;
   } | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [showEndGameConfirm, setShowEndGameConfirm] = useState(false);
-  const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
-  const { theme } = useTheme();
+  const [playingCardIndex, setPlayingCardIndex] = useState<number | null>(null);
 
   //Warn when user try to leave the page
   useBeforeUnload(!showGameOver);
-
-  //Play audio when answer is checking
-  useEffect(() => {
-    if (isCheckingAnswer && data) {
-      // Stop any preview audio first
-      setIsPreviewPlaying(false);
-
-      const winner =
-        data[0].popularity > data[1].popularity ? data[0] : data[1];
-      if (audioRef.current && winner.preview_url) {
-        audioRef.current.src = winner.preview_url;
-        audioRef.current.play().catch(console.error);
-      }
-    } else {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
-    }
-  }, [isCheckingAnswer, data]);
 
   //Show loading when data is loading
   if (isPending) {
@@ -172,18 +115,25 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
   const handleCardClick = (selectedIndex: number) => {
     if (isCheckingAnswer) return;
 
-    // Stop any playing preview audio before showing result
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
-    setIsPreviewPlaying(false);
-
     const [first, second] = data;
+
     const isCorrect =
       selectedIndex === 0
         ? first.popularity > second.popularity
         : second.popularity > first.popularity;
+
+    // Determine the winner based on popularity
+    const winner = first.popularity > second.popularity ? first : second;
+
+    // Play the winner's preview audio if it exists
+    if (winner.preview_url) {
+      // Reset the playing card index
+      setPlayingCardIndex(null);
+      // Play the winner's preview audio
+      setTimeout(() => {
+        setPlayingCardIndex(data.indexOf(winner));
+      }, 100);
+    }
 
     let points = 0;
     let newLives = lives;
@@ -242,10 +192,13 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
 
   //Handle dialog close
   const handleDialogClose = (open: boolean) => {
-    if (!open && selectedAnswer && !selectedAnswer.showNextRound) {
-      setSelectedAnswer((prev) => ({ ...prev!, showNextRound: true }));
-      setCurrentRound((prev) => prev + 1);
-      refetch();
+    if (!open) {
+      setPlayingCardIndex(null);
+      if (selectedAnswer && !selectedAnswer.showNextRound) {
+        setSelectedAnswer((prev) => ({ ...prev!, showNextRound: true }));
+        setCurrentRound((prev) => prev + 1);
+        refetch();
+      }
     }
     setIsCheckingAnswer(open);
   };
@@ -268,12 +221,6 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
       role="main"
       aria-label={`${mode} game - Round ${currentRound + 1}`}
     >
-      <audio
-        ref={audioRef}
-        className="hidden"
-        aria-hidden="true"
-        onEnded={() => setIsPreviewPlaying(false)}
-      />
       <div className="flex flex-col items-center gap-4">
         <div className="w-full max-w-7xl">
           {/* Game Info */}
@@ -295,17 +242,7 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
                   <p className="text-muted-foreground">
                     Choose the more popular {mode} on
                   </p>
-                  <Image
-                    src={
-                      theme === "dark"
-                        ? "/spotify-logo-white.png"
-                        : "/spotify-logo-black.png"
-                    }
-                    alt="Spotify"
-                    width={80}
-                    height={24}
-                    className="relative -top-[1px]"
-                  />
+                  <SpotifyLogo className="relative -top-[1px]" />
                 </div>
               </div>
             </div>
@@ -411,11 +348,11 @@ export function GamePlaying({ mode, genre, onScore, onEnd }: GamePlayingProps) {
             {data.map((item, index) => (
               <GameCard
                 key={item.id}
+                index={index}
                 data={item}
                 onClick={() => handleCardClick(index)}
-                isPreviewPlaying={isPreviewPlaying}
-                onPreviewStateChange={setIsPreviewPlaying}
-                audioRef={audioRef as React.RefObject<HTMLAudioElement>}
+                isPlaying={playingCardIndex === index}
+                setPlayingCardIndex={setPlayingCardIndex}
                 aria-label={`Select ${item.name}`}
                 tabIndex={0}
                 autoFocus={index === 0}

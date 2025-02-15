@@ -63,7 +63,7 @@ export function ThemeToggle() {
                     times: [0, 0.6, 1],
                   },
                 }}
-                className="absolute inset-0 flex items-center justify-center"
+                className="flex items-center justify-center"
                 aria-hidden="true"
               >
                 <Sun className="h-[1.2rem] w-[1.2rem]" />
@@ -84,7 +84,7 @@ export function ThemeToggle() {
                     times: [0, 0.6, 1],
                   },
                 }}
-                className="absolute inset-0 flex items-center justify-center"
+                className="flex items-center justify-center"
                 aria-hidden="true"
               >
                 <Moon className="h-[1.2rem] w-[1.2rem]" />
@@ -104,7 +104,6 @@ export function ThemeToggle() {
           aria-checked={theme === "light"}
           aria-label="Switch to light theme"
         >
-          <Sun className="mr-2 h-4 w-4" aria-hidden="true" />
           Light
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -114,7 +113,6 @@ export function ThemeToggle() {
           aria-checked={theme === "dark"}
           aria-label="Switch to dark theme"
         >
-          <Moon className="mr-2 h-4 w-4" aria-hidden="true" />
           Dark
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -124,12 +122,6 @@ export function ThemeToggle() {
           aria-checked={theme === "system"}
           aria-label="Use system theme"
         >
-          <span
-            className="mr-2 flex h-4 w-4 items-center justify-center"
-            aria-hidden="true"
-          >
-            💻
-          </span>
           System
         </DropdownMenuItem>
       </DropdownMenuContent>
