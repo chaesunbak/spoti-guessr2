@@ -66,7 +66,7 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
-  const GA_ID = process.env.NEXT_PUBLIC_GID;
+  const GA_ID = process.env.GID;
 
   return (
     <html lang="en" suppressHydrationWarning>
