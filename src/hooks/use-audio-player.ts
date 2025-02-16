@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useMuteStore } from "@/stores/use-mute-store";
+import { useMuteStore } from "@/components/providers/mute-store-provider";
 
 interface UseAudioPlayerProps {
   url: string | null;
@@ -16,7 +16,7 @@ export function useAudioPlayer({
   const [progress, setProgress] = useState(0);
   const [paused, setPaused] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const { isMuted } = useMuteStore();
+  const { isMuted } = useMuteStore((state) => state);
 
   // Mute audio if user is muted
   useEffect(() => {

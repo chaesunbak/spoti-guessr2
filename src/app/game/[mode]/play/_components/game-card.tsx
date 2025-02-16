@@ -1,15 +1,14 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { Play, Pause, X, AlertCircle } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import type { GameItem } from "@/types/game";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
-import { motion, AnimatePresence } from "framer-motion";
-import { useMuteStore } from "@/stores/use-mute-store";
 import { useAudioPlayer } from "@/hooks/use-audio-player";
 import { AudioControlButton } from "@/app/game/[mode]/play/_components/audio-control-button";
+import { useMuteStore } from "@/components/providers/mute-store-provider";
 
 interface GameCardProps {
   data: GameItem;
@@ -36,7 +35,7 @@ export function GameCard({
   "data-card-index": dataCardIndex,
   "aria-label": ariaLabel,
 }: GameCardProps) {
-  const { isMuted } = useMuteStore();
+  const { isMuted } = useMuteStore((state) => state);
 
   const imageRef = useRef<HTMLImageElement | null>(null);
 

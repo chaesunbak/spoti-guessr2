@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="flex flex-1 flex-col gap-4 p-2 lg:p-4">
       <div className="grid h-full w-full auto-rows-min gap-4 md:grid-cols-3">
-        <section className="rounded-xl bg-muted/50 p-2 transition-all duration-300 hover:bg-muted/70 md:col-span-2 md:row-span-2 md:p-4 lg:p-6">
+        <section className="bg-muted/50 hover:bg-muted/70 rounded-xl p-2 transition-all duration-300 md:col-span-2 md:row-span-2 md:p-4 lg:p-6">
           <div className="flex h-full flex-col justify-between gap-8">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
@@ -20,7 +20,7 @@ export default function Home() {
                   className="animate-wiggle transition-all duration-300 hover:animate-none"
                 />
               </div>
-              <p className="max-w-lg text-muted-foreground">
+              <p className="text-muted-foreground max-w-lg">
                 What's trending? Compare songs, artists, and albums to guess
                 which one is more popular on{" "}
                 <a
@@ -62,10 +62,10 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="aspect-video rounded-xl bg-muted/50 p-2 transition-all duration-300 hover:bg-muted/70 md:p-4 lg:p-6">
+        <section className="bg-muted/50 hover:bg-muted/70 aspect-video rounded-xl p-2 transition-all duration-300 md:p-4 lg:p-6">
           <div className="flex h-full flex-col justify-between">
             <h3 className="mb-2">Release Notes</h3>
-            <div className="scrollbar-none flex-1 space-y-1 overflow-y-auto text-xs text-muted-foreground md:text-sm">
+            <div className="scrollbar-none text-muted-foreground flex-1 space-y-1 overflow-y-auto text-xs md:text-sm">
               <p>Current Version: v0.1.0</p>
               <p>Last Updated: February 2025</p>
               <p>New Features:</p>
@@ -82,24 +82,24 @@ export default function Home() {
           </div>
         </section>
         <div
-          className="aspect-video rounded-xl bg-muted/50 transition-all duration-300 hover:bg-muted/70"
+          className="bg-muted/50 hover:bg-muted/70 aspect-video rounded-xl transition-all duration-300"
           aria-hidden="true"
         />
         <div
-          className="aspect-video rounded-xl bg-muted/50 transition-all duration-300 hover:bg-muted/70"
+          className="bg-muted/50 hover:bg-muted/70 aspect-video rounded-xl transition-all duration-300"
           aria-hidden="true"
         />
         <div
-          className="aspect-video rounded-xl bg-muted/50 transition-all duration-300 hover:bg-muted/70"
+          className="bg-muted/50 hover:bg-muted/70 aspect-video rounded-xl transition-all duration-300"
           aria-hidden="true"
         />
         <div
-          className="aspect-video rounded-xl bg-muted/50 transition-all duration-300 hover:bg-muted/70"
+          className="bg-muted/50 hover:bg-muted/70 aspect-video rounded-xl transition-all duration-300"
           aria-hidden="true"
         />
       </div>
       <div
-        className="hidden min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min"
+        className="bg-muted/50 hidden min-h-[100vh] flex-1 rounded-xl md:min-h-min"
         aria-hidden="true"
       />
     </div>

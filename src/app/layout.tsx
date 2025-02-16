@@ -8,6 +8,8 @@ import QueryClinetProvider from "@/components/providers/query-client-provider";
 import { cookies } from "next/headers";
 import { Toaster } from "@/components/ui/toaster";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { MuteStoreProvider } from "@/components/providers/mute-store-provider";
+import { AuthStoreProvider } from "@/components/providers/auth-store-provider";
 
 export const metadata: Metadata = {
   title: {
@@ -78,14 +80,20 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <SidebarProvider defaultOpen={defaultOpen}>
-              <AppSidebar />
-              <div className="w-full">
-                <AppHeader />
-                <main className="min-h-[calc(100vh-3.5rem)]">{children}</main>
-                <Toaster />
-              </div>
-            </SidebarProvider>
+            <AuthStoreProvider>
+              <MuteStoreProvider>
+                <SidebarProvider defaultOpen={defaultOpen}>
+                  <AppSidebar />
+                  <div className="w-full">
+                    <AppHeader />
+                    <main className="min-h-[calc(100vh-3.5rem)]">
+                      {children}
+                    </main>
+                    <Toaster />
+                  </div>
+                </SidebarProvider>
+              </MuteStoreProvider>
+            </AuthStoreProvider>
           </ThemeProvider>
         </QueryClinetProvider>
       </body>

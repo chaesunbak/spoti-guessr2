@@ -116,3 +116,18 @@ export function getRandomNickname(): string {
   const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
   return `${randomAdjective}${randomNoun}`;
 }
+
+export function setDelay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * 지정된 최소값과 최대값(포함) 사이의 랜덤 숫자를 생성합니다.
+ *
+ * @param {number} min - 최소값.
+ * @param {number} max - 최대값.
+ * @return {number} - 생성된 랜덤 숫자.
+ */
+export function getRandomNum(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}

@@ -3,5 +3,5 @@ export interface User {
   email: string;
   nickname: string;
   createdAt: number;
-  permission: string;
+  permission: "ADMIN" | "read-only";
 }

@@ -4,11 +4,12 @@ import { useState } from "react";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/config";
-import { useAuthStore } from "@/stores/use-auth-store";
 import { getRandomNickname } from "@/lib/utils";
 import type { User } from "@/types/user";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/components/providers/auth-store-provider";
+
 export const useContinueWithGoogle = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
@@ -21,15 +22,29 @@ export const useContinueWithGoogle = () => {
     setLoading(true);
     try {
       const result = await signInWithPopup(auth, provider);
-
       const newUser = result.user;
       const userRef = doc(db, "users", newUser.uid);
       const userSnap = await getDoc(userRef);
 
       if (userSnap.exists()) {
-        // login
-        const userDoc = userSnap.data();
-        loginUser(userDoc as User);
+        const userDoc = userSnap.data() as User;
+
+        console.log("User data for token:", userDoc);
+
+        // Request token from server
+        const response = await fetch("/api/auth/token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ user: userDoc }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to get auth token");
+        }
+
+        loginUser(userDoc);
 
         toast({
           title: "Welcome back!",
@@ -57,6 +72,7 @@ export const useContinueWithGoogle = () => {
         router.push("/");
       }
     } catch (error) {
+      console.error(error);
       setError(error as Error);
       toast({
         title: "Error",

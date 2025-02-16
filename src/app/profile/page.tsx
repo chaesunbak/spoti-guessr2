@@ -10,14 +10,13 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
-import { useAuthStore } from "@/stores/use-auth-store";
 import { useToast } from "@/hooks/use-toast";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLogout } from "@/hooks/use-logout";
-import { useEffect } from "react";
+import { useAuthStore } from "@/components/providers/auth-store-provider";
 
 export default function Profile() {
   const user = useAuthStore((state) => state.user);
@@ -26,12 +25,6 @@ export default function Profile() {
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
   const { handleLogout } = useLogout();
-
-  useEffect(() => {
-    if (!user) {
-      router.push("/auth");
-    }
-  }, [user, router]);
 
   const handleDeleteAccount = async () => {
     if (!user) {
@@ -66,7 +59,11 @@ export default function Profile() {
   };
 
   if (!user) {
-    return null;
+    return (
+      <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
   }
 
   return (
@@ -81,8 +78,6 @@ export default function Profile() {
             <p>Email: {user.email}</p>
             <p>Nickname: {user.nickname}</p>
             <p>Created At: {new Date(user.createdAt).toLocaleDateString()}</p>
-
-            <p>Permission: {user.permission}</p>
           </div>
         </CardContent>
         <CardFooter className="flex justify-end gap-2">
