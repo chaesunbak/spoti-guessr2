@@ -99,6 +99,7 @@ export default async function RootLayout({
             </AuthStoreProvider>
           </ThemeProvider>
         </QueryClinetProvider>
+        <script async src="https://utmate.me/sdk/utmate-sdk.iife.js"></script>
       </body>
     </html>
   );
