@@ -20,7 +20,7 @@ const eslintConfig = [
     rules: {
       "@typescript-eslint/no-unused-vars": "warn",
       "@tanstack/query/exhaustive-deps": "error",
-      "@tanstack/query/prefer-query-object": "error",
+      "@tanstack/query/prefer-query-object-syntax": "error",
     },
   }),
 ];
