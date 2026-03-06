@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { GameMode, GameGenre, GameState } from "@/types/game";
 import { GameReady } from "@/app/game/[mode]/play/_components/game-ready";
 import { GamePlaying } from "@/app/game/[mode]/play/_components/game-playing";
