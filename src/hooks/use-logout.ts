@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { useAuthStore } from "@/components/providers/auth-store-provider";
+import { useAuthStore } from "@/providers/auth-store-provider";
 import { auth } from "@/lib/firebase/config";
 
 export function useLogout() {

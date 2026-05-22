@@ -8,7 +8,7 @@ import { getRandomNickname } from "@/lib/utils";
 import type { User } from "@/types/user";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/components/providers/auth-store-provider";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 export const useContinueWithGoogle = () => {
   const [loading, setLoading] = useState<boolean>(false);

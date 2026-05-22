@@ -16,7 +16,7 @@ import { db } from "@/lib/firebase/config";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLogout } from "@/hooks/use-logout";
-import { useAuthStore } from "@/components/providers/auth-store-provider";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 export default function Profile() {
   const user = useAuthStore((state) => state.user);

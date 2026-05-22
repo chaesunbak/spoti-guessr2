@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Volume2, VolumeX } from "lucide-react";
-import { useMuteStore } from "@/components/providers/mute-store-provider";
+import { useMuteStore } from "@/providers/mute-store-provider";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function MuteToggle() {
