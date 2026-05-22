@@ -55,17 +55,12 @@ export function AudioControlButton({
             <motion.div
               key="no-preview"
               initial={{ opacity: 0, scale: 0.3 }}
-              animate={{
-                opacity: 1,
-                scale: [0.3, 1.2, 1],
-              }}
+              animate={{ opacity: 1, scale: [0.3, 1.2, 1] }}
               exit={{ opacity: 0, scale: 0.3 }}
               transition={{
                 duration: 0.4,
                 ease: [0.175, 0.885, 0.32, 1.275],
-                scale: {
-                  times: [0, 0.6, 1],
-                },
+                scale: { times: [0, 0.6, 1] },
               }}
               className="flex items-center justify-center"
               aria-hidden="true"
@@ -77,17 +72,12 @@ export function AudioControlButton({
               key="pause"
               onClick={() => setPaused(true)}
               initial={{ opacity: 0, scale: 0.3 }}
-              animate={{
-                opacity: 1,
-                scale: [0.3, 1.2, 1],
-              }}
+              animate={{ opacity: 1, scale: [0.3, 1.2, 1] }}
               exit={{ opacity: 0, scale: 0.3 }}
               transition={{
                 duration: 0.4,
                 ease: [0.175, 0.885, 0.32, 1.275],
-                scale: {
-                  times: [0, 0.6, 1],
-                },
+                scale: { times: [0, 0.6, 1] },
               }}
               className="flex items-center justify-center"
               aria-hidden="true"
@@ -99,17 +89,12 @@ export function AudioControlButton({
               key="play"
               onClick={() => setPaused(false)}
               initial={{ opacity: 0, scale: 0.3 }}
-              animate={{
-                opacity: 1,
-                scale: [0.3, 1.2, 1],
-              }}
+              animate={{ opacity: 1, scale: [0.3, 1.2, 1] }}
               exit={{ opacity: 0, scale: 0.3 }}
               transition={{
                 duration: 0.4,
                 ease: [0.175, 0.885, 0.32, 1.275],
-                scale: {
-                  times: [0, 0.6, 1],
-                },
+                scale: { times: [0, 0.6, 1] },
               }}
               className="flex items-center justify-center"
               aria-hidden="true"

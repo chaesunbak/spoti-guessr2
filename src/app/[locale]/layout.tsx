@@ -10,6 +10,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { MuteStoreProvider } from "@/providers/mute-store-provider";
 import { AuthStoreProvider } from "@/providers/auth-store-provider";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
+import { getMessages } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: {
@@ -63,42 +67,51 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
+
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
-
   const GA_ID = process.env.NEXT_PUBLIC_GID;
+  const messages = await getMessages();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
       <body className="bg-background text-foreground antialiased">
-        {/* IF TOO MAN PROVIDERS, CHAGNE TO GLOBAL PROVIDERS */}
-        <QueryClinetProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <AuthStoreProvider>
-              <MuteStoreProvider>
-                <SidebarProvider defaultOpen={defaultOpen}>
-                  <AppSidebar />
-                  <div className="w-full">
-                    <AppHeader />
-                    <main className="min-h-[calc(100vh-3.5rem)]">
-                      {children}
-                    </main>
-                    <Toaster />
-                  </div>
-                </SidebarProvider>
-              </MuteStoreProvider>
-            </AuthStoreProvider>
-          </ThemeProvider>
-        </QueryClinetProvider>
+        <NextIntlClientProvider messages={messages}>
+          <QueryClinetProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <AuthStoreProvider>
+                <MuteStoreProvider>
+                  <SidebarProvider defaultOpen={defaultOpen}>
+                    <AppSidebar />
+                    <div className="w-full">
+                      <AppHeader />
+                      <main className="min-h-[calc(100vh-3.5rem)]">
+                        {children}
+                      </main>
+                      <Toaster />
+                    </div>
+                  </SidebarProvider>
+                </MuteStoreProvider>
+              </AuthStoreProvider>
+            </ThemeProvider>
+          </QueryClinetProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

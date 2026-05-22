@@ -1,0 +1,169 @@
+{
+  "navigation": {
+    "appName": "Spoti-Guessr",
+    "application": "앱",
+    "home": "홈",
+    "game": "게임",
+    "artists": "아티스트",
+    "albums": "앨범",
+    "tracks": "트랙",
+    "termsOfService": "이용약관",
+    "privacyPolicy": "개인정보처리방침",
+    "sourceCode": "소스 코드",
+    "disclaimer": "Spoti-Guessr는 오픈 소스 프로젝트입니다. 모든 게임 데이터는 실제 Spotify 데이터와 다를 수 있습니다.",
+    "copyright": "Chaesunbak 제공\n© 2025 Chaesunbak. 모든 권리 보유."
+  },
+  "header": {
+    "searchPlaceholder": "검색...",
+    "navigateHome": "홈으로 이동",
+    "searchContent": "콘텐츠 검색"
+  },
+  "home": {
+    "description": "지금 무엇이 인기 있나요? 노래, 아티스트, 앨범을 비교하여 {spotify}에서 더 인기 있는 것을 맞춰보세요.",
+    "startPlaying": "게임 시작",
+    "viewLeaderboard": "리더보드 보기",
+    "releaseNotes": "릴리즈 노트",
+    "currentVersion": "현재 버전: {version}",
+    "lastUpdated": "마지막 업데이트: {date}",
+    "newFeatures": "새로운 기능:"
+  },
+  "game": {
+    "selectMode": "게임 모드 선택",
+    "artistsTitle": "아티스트",
+    "artistsDescription": "Spotify에서 더 인기 있는 아티스트를 맞춰보세요",
+    "albumsTitle": "앨범",
+    "albumsDescription": "Spotify에서 더 인기 있는 앨범을 맞춰보세요",
+    "tracksTitle": "트랙",
+    "tracksDescription": "Spotify에서 더 인기 있는 트랙을 맞춰보세요"
+  },
+  "gameMode": {
+    "selectGenre": "{mode} 모드 장르 선택"
+  },
+  "gameReady": {
+    "round": "라운드",
+    "choosePopular": "더 인기 있는 {mode}를 선택하세요",
+    "lives": "목숨",
+    "score": "점수",
+    "streak": "연속",
+    "readyToPlay": "준비되셨나요?",
+    "readyDescription": "어떤 {mode}가 더 인기 있는지 정확하게 맞춰 최고 점수를 획득하세요.",
+    "startGame": "게임 시작",
+    "viewTutorialAgain": "튜토리얼 다시 보기",
+    "firstMode": "첫 번째 {mode}",
+    "secondMode": "두 번째 {mode}",
+    "tutorialFinish": "완료",
+    "tutorialNext": "다음",
+    "skipTutorial": "튜토리얼 건너뛰기",
+    "tutorial": {
+      "roundCounter": {
+        "title": "라운드 카운터",
+        "description": "현재 라운드 번호를 표시합니다. 각 라운드에서 두 가지 항목을 비교합니다."
+      },
+      "livesDisplay": {
+        "title": "목숨 표시",
+        "description": "목숨은 3개로 시작합니다. 오답 시 1개 감소하지만, 5연속 정답 시 1개 회복됩니다!"
+      },
+      "scoreDisplay": {
+        "title": "점수 표시",
+        "description": "총 점수입니다. 정답 시 1점을 획득하며, 연속 정답 시 보너스 점수가 주어집니다!"
+      },
+      "streakCounter": {
+        "title": "연속 정답 카운터",
+        "description": "현재 연속 정답 수입니다. 3연속 정답마다 보너스 점수가 주어집니다!"
+      },
+      "gameCards": {
+        "title": "게임 카드",
+        "description": "더 인기 있다고 생각하는 {mode}를 클릭하세요. 마우스를 올리면 미리 듣기가 재생됩니다!"
+      },
+      "endGameButton": {
+        "title": "게임 종료 버튼",
+        "description": "클릭하면 게임을 종료하고 최종 점수와 연속 기록을 볼 수 있습니다."
+      }
+    }
+  },
+  "gamePlaying": {
+    "round": "{round}라운드",
+    "choosePopular": "더 인기 있는 {mode}를 선택하세요",
+    "lives": "목숨",
+    "score": "점수",
+    "streak": "연속",
+    "correct": "정답!",
+    "wrong": "오답!",
+    "isMorePopular": "{name}이(가) 더 인기 있습니다!",
+    "gameOver": "게임 오버!",
+    "finalScore": "최종 점수: {score}",
+    "maxStreak": "최대 연속: {streak}",
+    "backToMain": "메인으로",
+    "endGame": "게임 종료",
+    "endGameTitle": "게임 종료",
+    "endGameConfirm": "게임을 종료하시겠습니까? 현재 점수는 {score}점입니다.",
+    "continue": "계속하기",
+    "failedToLoad": "게임 데이터를 불러오지 못했습니다",
+    "tryAgain": "다시 시도"
+  },
+  "gameFinished": {
+    "gameOver": "게임 오버!",
+    "finalScore": "최종 점수",
+    "roundsPlayed": "플레이한 라운드",
+    "timePlayed": "플레이 시간",
+    "averageScore": "평균 점수",
+    "mode": "모드",
+    "genre": "장르",
+    "playAgain": "다시 플레이",
+    "shareResults": "결과 공유",
+    "chooseMode": "모드 선택",
+    "shareTitle": "Spoti-Guessr 결과",
+    "shareThanks": "공유해 주셔서 감사합니다!",
+    "shareThankDesc": "친구들도 좋아할 거예요!",
+    "shareCopied": "결과가 클립보드에 복사되었습니다!",
+    "shareCopiedDesc": "원하는 곳에 붙여넣기 하세요.",
+    "shareFailed": "결과 공유에 실패했습니다",
+    "shareFailedDesc": "다시 시도해 주세요.",
+    "shareText": "🎮 Spoti-Guessr 결과\n\n🏆 점수: {score}\n🎯 라운드: {rounds}\n⌛ 시간: {time}\n📊 평균 점수: {avg}\n🎵 모드: {mode}\n🎸 장르: {genre}\n\nhttps://spoti-guessr.vercel.app 에서 플레이하세요"
+  },
+  "auth": {
+    "welcome": "Spoti-Guessr에 오신 것을 환영합니다",
+    "loginDescription": "Google 계정으로 로그인하세요",
+    "continueWithGoogle": "Google로 계속하기",
+    "signingIn": "로그인 중..."
+  },
+  "profile": {
+    "title": "프로필",
+    "manageAccount": "계정 관리",
+    "email": "이메일: {email}",
+    "nickname": "닉네임: {nickname}",
+    "createdAt": "가입일: {date}",
+    "logout": "로그아웃",
+    "deleteAccount": "계정 삭제",
+    "deleting": "삭제 중...",
+    "deleteConfirm": "계정을 삭제하시겠습니까?",
+    "deleteSuccess": "계정 삭제 완료",
+    "deleteSuccessDesc": "계정이 삭제되었습니다",
+    "deleteError": "오류"
+  },
+  "userProfile": {
+    "hello": "{name}님, 안녕하세요",
+    "profile": "프로필",
+    "signIn": "로그인",
+    "logOut": "로그아웃"
+  },
+  "themeToggle": {
+    "light": "라이트",
+    "dark": "다크",
+    "system": "시스템"
+  },
+  "releaseNotes": {
+    "title": "릴리즈 노트",
+    "newFeatures": "새로운 기능",
+    "bugFixes": "버그 수정",
+    "breakingChanges": "주요 변경 사항"
+  },
+  "languageSwitcher": {
+    "label": "언어",
+    "en": "English",
+    "ko": "한국어"
+  },
+  "popularity": {
+    "points": "점"
+  }
+}

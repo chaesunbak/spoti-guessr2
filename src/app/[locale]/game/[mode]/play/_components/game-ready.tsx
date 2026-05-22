@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useTheme } from "next-themes";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface GameReadyProps {
   mode: GameMode;
@@ -17,60 +18,10 @@ interface GameReadyProps {
   onStart: () => void;
 }
 
-interface TutorialStep {
-  element: string;
-  title: string;
-  description: string;
-  position: "top" | "bottom" | "left" | "right";
-}
-
-const tutorialSteps: TutorialStep[] = [
-  {
-    element: "round-info",
-    title: "Round Counter",
-    description:
-      "Shows your current round number. Each round presents two new items to compare.",
-    position: "right",
-  },
-  {
-    element: "lives-display",
-    title: "Lives Display",
-    description:
-      "You start with 3 lives. Lose one for each wrong answer, but gain one for every 5 correct answers in a row!",
-    position: "bottom",
-  },
-  {
-    element: "score-display",
-    title: "Score Display",
-    description:
-      "Your total score. Get 1 point for each correct answer, with bonus points for streaks!",
-    position: "bottom",
-  },
-  {
-    element: "streak-display",
-    title: "Streak Counter",
-    description:
-      "Your current streak of correct answers. Every 3 correct answers in a row gives bonus points!",
-    position: "bottom",
-  },
-  {
-    element: "game-cards",
-    title: "Game Cards",
-    description:
-      "Click on the {mode} you think is more popular. Hover to play its preview audio if available!",
-    position: "top",
-  },
-  {
-    element: "end-game-button",
-    title: "End Game Button",
-    description: "Click to end the game and see your final score and streak.",
-    position: "left",
-  },
-];
-
 const TUTORIAL_STORAGE_KEY = "spoti-guessr-tutorial-completed";
 
 export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
+  const t = useTranslations("gameReady");
   const [currentStep, setCurrentStep] = useState(0);
   const [showTutorial, setShowTutorial] = useState(() => {
     const completed = localStorage.getItem(TUTORIAL_STORAGE_KEY);
@@ -82,13 +33,52 @@ export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
   });
   const { theme } = useTheme();
 
+  const tutorialSteps = [
+    {
+      element: "round-info",
+      title: t("tutorial.roundCounter.title"),
+      description: t("tutorial.roundCounter.description"),
+      position: "right" as const,
+    },
+    {
+      element: "lives-display",
+      title: t("tutorial.livesDisplay.title"),
+      description: t("tutorial.livesDisplay.description"),
+      position: "bottom" as const,
+    },
+    {
+      element: "score-display",
+      title: t("tutorial.scoreDisplay.title"),
+      description: t("tutorial.scoreDisplay.description"),
+      position: "bottom" as const,
+    },
+    {
+      element: "streak-display",
+      title: t("tutorial.streakCounter.title"),
+      description: t("tutorial.streakCounter.description"),
+      position: "bottom" as const,
+    },
+    {
+      element: "game-cards",
+      title: t("tutorial.gameCards.title"),
+      description: t("tutorial.gameCards.description", { mode }),
+      position: "top" as const,
+    },
+    {
+      element: "end-game-button",
+      title: t("tutorial.endGameButton.title"),
+      description: t("tutorial.endGameButton.description"),
+      position: "left" as const,
+    },
+  ];
+
   useEffect(() => {
     if (currentStep >= tutorialSteps.length) {
       setShowTutorial(false);
       setTutorialCompleted(true);
       localStorage.setItem(TUTORIAL_STORAGE_KEY, "true");
     }
-  }, [currentStep]);
+  }, [currentStep, tutorialSteps.length]);
 
   const handleRestartTutorial = () => {
     setCurrentStep(0);
@@ -122,7 +112,7 @@ export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
         <h4 id={`tutorial-title-${elementId}`} className="font-semibold">
           {step.title}
         </h4>
-        <p className="text-sm">{step.description.replace("{mode}", mode)}</p>
+        <p className="text-sm">{step.description}</p>
         <div className="flex gap-2 pt-2">
           <Button
             size="sm"
@@ -130,20 +120,22 @@ export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
             onClick={handleNextStep}
             aria-label={
               currentStep === tutorialSteps.length - 1
-                ? "Finish tutorial"
-                : "Next tutorial step"
+                ? t("tutorialFinish")
+                : t("tutorialNext")
             }
           >
-            {currentStep === tutorialSteps.length - 1 ? "Finish" : "Next"}
+            {currentStep === tutorialSteps.length - 1
+              ? t("tutorialFinish")
+              : t("tutorialNext")}
           </Button>
           <Button
             size="sm"
             variant="secondary"
             onClick={handleSkipTutorial}
             className="flex-1"
-            aria-label="Skip tutorial"
+            aria-label={t("skipTutorial")}
           >
-            Skip Tutorial
+            {t("skipTutorial")}
           </Button>
         </div>
       </div>
@@ -169,9 +161,9 @@ export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
                       role="status"
                       aria-label="Round information"
                     >
-                      <h2>Round</h2>
+                      <h2>{t("round")}</h2>
                       <p className="text-muted-foreground">
-                        Choose the more popular {mode} on{" "}
+                        {t("choosePopular", { mode })}{" "}
                         <Image
                           src={
                             theme === "dark"
@@ -201,7 +193,7 @@ export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
                       aria-label="Lives remaining: 3"
                     >
                       <span className="text-xs font-medium tracking-wider text-muted-foreground lg:text-sm">
-                        LIVES
+                        {t("lives")}
                       </span>
                       <div
                         className="flex items-center gap-1"
@@ -231,7 +223,7 @@ export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
                       aria-label="Current score: 0"
                     >
                       <span className="text-xs font-medium tracking-wider text-muted-foreground lg:text-sm">
-                        SCORE
+                        {t("score")}
                       </span>
                       <div className="flex items-center">
                         <span className="text-lg font-bold md:text-2xl lg:text-3xl">
@@ -254,7 +246,7 @@ export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
                       aria-label="Current streak: 0"
                     >
                       <span className="text-xs font-medium tracking-wider text-muted-foreground lg:text-sm">
-                        STREAK
+                        {t("streak")}
                       </span>
                       <div className="flex items-center">
                         <span className="text-lg font-bold md:text-2xl lg:text-3xl">
@@ -290,11 +282,10 @@ export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
             <div className="h-full w-full max-w-7xl rounded-xl bg-muted backdrop-blur-sm">
               <div className="flex h-full flex-col items-center justify-center gap-4 p-6">
                 <h2 className="text-2xl font-bold md:text-3xl">
-                  Ready to Play?
+                  {t("readyToPlay")}
                 </h2>
                 <p className="max-w-lg text-center text-lg text-muted-foreground">
-                  Try to get the highest score by correctly guessing which{" "}
-                  {mode} is more popular.
+                  {t("readyDescription", { mode })}
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                   <Button
@@ -304,7 +295,7 @@ export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
                     aria-label="Start playing the game"
                   >
                     <Play className="h-5 w-5" aria-hidden="true" />
-                    Start Game
+                    {t("startGame")}
                   </Button>
                   <Button
                     variant="secondary"
@@ -314,7 +305,7 @@ export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
                     aria-label="View the tutorial again"
                   >
                     <EyeIcon className="h-5 w-5" aria-hidden="true" />
-                    View Tutorial Again
+                    {t("viewTutorialAgain")}
                   </Button>
                 </div>
               </div>
@@ -334,7 +325,7 @@ export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
                       aria-label={`First ${mode} preview card`}
                     >
                       <p className="text-xl text-muted-foreground">
-                        First {mode}
+                        {t("firstMode", { mode })}
                       </p>
                     </div>
                     <div
@@ -342,7 +333,7 @@ export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
                       aria-label={`Second ${mode} preview card`}
                     >
                       <p className="text-xl capitalize text-muted-foreground">
-                        Second {mode}
+                        {t("secondMode", { mode })}
                       </p>
                     </div>
                   </div>

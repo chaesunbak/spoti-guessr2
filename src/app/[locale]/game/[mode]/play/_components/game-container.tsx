@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { GameMode, GameGenre, GameState } from "@/types/game";
-import { GameReady } from "@/app/game/[mode]/play/_components/game-ready";
-import { GamePlaying } from "@/app/game/[mode]/play/_components/game-playing";
-import { GameFinished } from "@/app/game/[mode]/play/_components/game-finished";
+import { GameReady } from "@/app/[locale]/game/[mode]/play/_components/game-ready";
+import { GamePlaying } from "@/app/[locale]/game/[mode]/play/_components/game-playing";
+import { GameFinished } from "@/app/[locale]/game/[mode]/play/_components/game-finished";
 import { sendGAEvent } from "@next/third-parties/google";
 import { v4 as uuidv4 } from "uuid";
 

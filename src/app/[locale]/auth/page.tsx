@@ -10,16 +10,18 @@ import {
 } from "@/components/ui/card";
 import { useContinueWithGoogle } from "@/hooks/use-continue-with-google";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function Auth() {
   const { continueWithGoogle, loading } = useContinueWithGoogle();
+  const t = useTranslations("auth");
 
   return (
     <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="space-y-1">
-          <CardTitle>Welcome to Spoti-Guessr</CardTitle>
-          <CardDescription>Login with your Google account</CardDescription>
+          <CardTitle>{t("welcome")}</CardTitle>
+          <CardDescription>{t("loginDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Button
@@ -41,7 +43,7 @@ export default function Auth() {
                 />
               </svg>
             )}
-            {loading ? "Signing in..." : "Continue with Google"}
+            {loading ? t("signingIn") : t("continueWithGoogle")}
           </Button>
         </CardContent>
       </Card>

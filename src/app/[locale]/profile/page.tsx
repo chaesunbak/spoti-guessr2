@@ -11,14 +11,14 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { deleteDoc, doc } from "firebase/firestore";
-import { db } from "@/lib/firebase/config";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLogout } from "@/hooks/use-logout";
 import { useAuthStore } from "@/providers/auth-store-provider";
+import { useTranslations } from "next-intl";
 
 export default function Profile() {
+  const t = useTranslations("profile");
   const user = useAuthStore((state) => state.user);
   const logoutUser = useAuthStore((state) => state.logoutUser);
   const { toast } = useToast();
@@ -31,25 +31,27 @@ export default function Profile() {
       return;
     }
 
-    if (!confirm("Are you sure you want to delete your account?")) {
+    if (!confirm(t("deleteConfirm"))) {
       return;
     }
     setIsDeleting(true);
 
     try {
+      const { deleteDoc, doc } = await import("firebase/firestore");
+      const { db } = await import("@/lib/firebase/config");
       await deleteDoc(doc(db, "users", user.uid));
 
       logoutUser();
 
       toast({
-        title: "Account deleted",
-        description: "Your account has been deleted",
+        title: t("deleteSuccess"),
+        description: t("deleteSuccessDesc"),
       });
 
       router.push("/");
     } catch (error) {
       toast({
-        title: "Error",
+        title: t("deleteError"),
         description: (error as Error).message,
         variant: "destructive",
       });
@@ -70,19 +72,23 @@ export default function Profile() {
     <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="space-y-1">
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>Manage your account</CardDescription>
+          <CardTitle>{t("title")}</CardTitle>
+          <CardDescription>{t("manageAccount")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-2">
-            <p>Email: {user.email}</p>
-            <p>Nickname: {user.nickname}</p>
-            <p>Created At: {new Date(user.createdAt).toLocaleDateString()}</p>
+            <p>{t("email", { email: user.email })}</p>
+            <p>{t("nickname", { nickname: user.nickname })}</p>
+            <p>
+              {t("createdAt", {
+                date: new Date(user.createdAt).toLocaleDateString(),
+              })}
+            </p>
           </div>
         </CardContent>
         <CardFooter className="flex justify-end gap-2">
           <Button variant="outline" onClick={handleLogout}>
-            Logout
+            {t("logout")}
           </Button>
           <Button
             variant="destructive"
@@ -92,7 +98,7 @@ export default function Profile() {
             {isDeleting ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              "Delete Account"
+              t("deleteAccount")
             )}
           </Button>
         </CardFooter>

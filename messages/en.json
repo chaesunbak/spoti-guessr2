@@ -1,0 +1,169 @@
+{
+  "navigation": {
+    "appName": "Spoti-Guessr",
+    "application": "Application",
+    "home": "Home",
+    "game": "Game",
+    "artists": "Artists",
+    "albums": "Albums",
+    "tracks": "Tracks",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "sourceCode": "Source Code",
+    "disclaimer": "Spoti-Guessr is an open-source project. All game data may differ from actual Spotify data.",
+    "copyright": "Powered by Chaesunbak\n© 2025 Chaesunbak. All rights reserved."
+  },
+  "header": {
+    "searchPlaceholder": "Search...",
+    "navigateHome": "Navigate to Home",
+    "searchContent": "Search content"
+  },
+  "home": {
+    "description": "What's trending? Compare songs, artists, and albums to guess which one is more popular on {spotify}.",
+    "startPlaying": "Start Playing",
+    "viewLeaderboard": "View Leaderboard",
+    "releaseNotes": "Release Notes",
+    "currentVersion": "Current Version: {version}",
+    "lastUpdated": "Last Updated: {date}",
+    "newFeatures": "New Features:"
+  },
+  "game": {
+    "selectMode": "Select Your Game Mode",
+    "artistsTitle": "Artists",
+    "artistsDescription": "Guess which artist is more popular on Spotify",
+    "albumsTitle": "Albums",
+    "albumsDescription": "Guess which album is more popular on Spotify",
+    "tracksTitle": "Tracks",
+    "tracksDescription": "Guess which track is more popular on Spotify"
+  },
+  "gameMode": {
+    "selectGenre": "Select Genre for {mode} Mode"
+  },
+  "gameReady": {
+    "round": "Round",
+    "choosePopular": "Choose the more popular {mode} on",
+    "lives": "LIVES",
+    "score": "SCORE",
+    "streak": "STREAK",
+    "readyToPlay": "Ready to Play?",
+    "readyDescription": "Try to get the highest score by correctly guessing which {mode} is more popular.",
+    "startGame": "Start Game",
+    "viewTutorialAgain": "View Tutorial Again",
+    "firstMode": "First {mode}",
+    "secondMode": "Second {mode}",
+    "tutorialFinish": "Finish",
+    "tutorialNext": "Next",
+    "skipTutorial": "Skip Tutorial",
+    "tutorial": {
+      "roundCounter": {
+        "title": "Round Counter",
+        "description": "Shows your current round number. Each round presents two new items to compare."
+      },
+      "livesDisplay": {
+        "title": "Lives Display",
+        "description": "You start with 3 lives. Lose one for each wrong answer, but gain one for every 5 correct answers in a row!"
+      },
+      "scoreDisplay": {
+        "title": "Score Display",
+        "description": "Your total score. Get 1 point for each correct answer, with bonus points for streaks!"
+      },
+      "streakCounter": {
+        "title": "Streak Counter",
+        "description": "Your current streak of correct answers. Every 3 correct answers in a row gives bonus points!"
+      },
+      "gameCards": {
+        "title": "Game Cards",
+        "description": "Click on the {mode} you think is more popular. Hover to play its preview audio if available!"
+      },
+      "endGameButton": {
+        "title": "End Game Button",
+        "description": "Click to end the game and see your final score and streak."
+      }
+    }
+  },
+  "gamePlaying": {
+    "round": "Round {round}",
+    "choosePopular": "Choose the more popular {mode} on",
+    "lives": "LIVES",
+    "score": "SCORE",
+    "streak": "STREAK",
+    "correct": "Correct!",
+    "wrong": "Wrong!",
+    "isMorePopular": "{name} is more popular!",
+    "gameOver": "Game Over!",
+    "finalScore": "Final Score: {score}",
+    "maxStreak": "Max Streak: {streak}",
+    "backToMain": "Back to Main",
+    "endGame": "End Game",
+    "endGameTitle": "End Game",
+    "endGameConfirm": "Are you sure you want to end the game? Your current score is {score} points.",
+    "continue": "Continue",
+    "failedToLoad": "Failed to load game data",
+    "tryAgain": "Try Again"
+  },
+  "gameFinished": {
+    "gameOver": "Game Over!",
+    "finalScore": "Final Score",
+    "roundsPlayed": "Rounds Played",
+    "timePlayed": "Time Played",
+    "averageScore": "Average Score",
+    "mode": "Mode",
+    "genre": "Genre",
+    "playAgain": "Play Again",
+    "shareResults": "Share Results",
+    "chooseMode": "Choose Mode",
+    "shareTitle": "Spoti-Guessr Results",
+    "shareThanks": "Thanks for sharing!",
+    "shareThankDesc": "Your friends will love it!",
+    "shareCopied": "Results copied to clipboard!",
+    "shareCopiedDesc": "You can paste it anywhere you want.",
+    "shareFailed": "Failed to share results",
+    "shareFailedDesc": "Please try again.",
+    "shareText": "🎮 Spoti-Guessr Results\n\n🏆 Score: {score}\n🎯 Rounds: {rounds}\n⌛ Time: {time}\n📊 Avg Score: {avg}\n🎵 Mode: {mode}\n🎸 Genre: {genre}\n\nPlay now at https://spoti-guessr.vercel.app"
+  },
+  "auth": {
+    "welcome": "Welcome to Spoti-Guessr",
+    "loginDescription": "Login with your Google account",
+    "continueWithGoogle": "Continue with Google",
+    "signingIn": "Signing in..."
+  },
+  "profile": {
+    "title": "Profile",
+    "manageAccount": "Manage your account",
+    "email": "Email: {email}",
+    "nickname": "Nickname: {nickname}",
+    "createdAt": "Created At: {date}",
+    "logout": "Logout",
+    "deleteAccount": "Delete Account",
+    "deleting": "Deleting...",
+    "deleteConfirm": "Are you sure you want to delete your account?",
+    "deleteSuccess": "Account deleted",
+    "deleteSuccessDesc": "Your account has been deleted",
+    "deleteError": "Error"
+  },
+  "userProfile": {
+    "hello": "Hello, {name}",
+    "profile": "Profile",
+    "signIn": "Sign in",
+    "logOut": "Log out"
+  },
+  "themeToggle": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "releaseNotes": {
+    "title": "Release Notes",
+    "newFeatures": "New Features",
+    "bugFixes": "Bug Fixes",
+    "breakingChanges": "Breaking Changes"
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "en": "English",
+    "ko": "한국어"
+  },
+  "popularity": {
+    "points": "points"
+  }
+}
