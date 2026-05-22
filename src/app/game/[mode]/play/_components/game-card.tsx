@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { useAudioPlayer } from "@/hooks/use-audio-player";
 import { AudioControlButton } from "@/app/game/[mode]/play/_components/audio-control-button";
-import { useMuteStore } from "@/components/providers/mute-store-provider";
+import { useMuteStore } from "@/providers/mute-store-provider";
 
 interface GameCardProps {
   data: GameItem;

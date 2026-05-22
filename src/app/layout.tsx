@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/app/_components/app-sidebar";
-import { AppHeader } from "@/app/_components/app-header";
-import { ThemeProvider } from "@/components/providers/theme-provider";
-import QueryClinetProvider from "@/components/providers/query-client-provider";
+import { AppSidebar } from "@/components/app-sidebar";
+import { AppHeader } from "@/components/app-header";
+import { ThemeProvider } from "@/providers/theme-provider";
+import QueryClinetProvider from "@/providers/query-client-provider";
 import { cookies } from "next/headers";
 import { Toaster } from "@/components/ui/toaster";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { MuteStoreProvider } from "@/components/providers/mute-store-provider";
-import { AuthStoreProvider } from "@/components/providers/auth-store-provider";
+import { MuteStoreProvider } from "@/providers/mute-store-provider";
+import { AuthStoreProvider } from "@/providers/auth-store-provider";
 
 export const metadata: Metadata = {
   title: {

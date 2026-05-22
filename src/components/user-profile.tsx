@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { useLogout } from "@/hooks/use-logout";
-import { useAuthStore } from "@/components/providers/auth-store-provider";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 export function UserProfile() {
   const user = useAuthStore((state) => state.user);

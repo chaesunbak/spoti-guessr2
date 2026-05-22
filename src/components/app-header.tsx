@@ -1,8 +1,8 @@
 import { Search, Home } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { UserProfile } from "@/app/_components/user-profile";
-import { MuteToggle } from "@/app/_components/mute-toggle";
-import { ThemeToggle } from "@/app/_components/theme-toggle";
+import { UserProfile } from "@/components/user-profile";
+import { MuteToggle } from "@/components/mute-toggle";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 

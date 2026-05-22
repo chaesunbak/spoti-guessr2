@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useMuteStore } from "@/components/providers/mute-store-provider";
+import { useMuteStore } from "@/providers/mute-store-provider";
 
 interface UseAudioPlayerProps {
   url: string | null;
