@@ -1,0 +1,13 @@
+[
+  {
+    "version": "v0.1.0",
+    "date": "2025-02",
+    "features": [
+      "New Fancy Layout",
+      "Game Feature",
+      "Migration to Next.js"
+    ],
+    "fixes": [],
+    "breaking": []
+  }
+]
