@@ -11,8 +11,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTranslations } from "next-intl";
 
 export function ThemeToggle() {
+  const t = useTranslations("themeToggle");
   const { setTheme, theme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
@@ -51,17 +53,12 @@ export function ThemeToggle() {
               <motion.div
                 key="light"
                 initial={{ opacity: 0, scale: 0.3 }}
-                animate={{
-                  opacity: 1,
-                  scale: [0.3, 1.2, 1],
-                }}
+                animate={{ opacity: 1, scale: [0.3, 1.2, 1] }}
                 exit={{ opacity: 0, scale: 0.3 }}
                 transition={{
                   duration: 0.4,
                   ease: [0.175, 0.885, 0.32, 1.275],
-                  scale: {
-                    times: [0, 0.6, 1],
-                  },
+                  scale: { times: [0, 0.6, 1] },
                 }}
                 className="absolute inset-0 flex items-center justify-center"
                 aria-hidden="true"
@@ -72,17 +69,12 @@ export function ThemeToggle() {
               <motion.div
                 key="dark"
                 initial={{ opacity: 0, scale: 0.3 }}
-                animate={{
-                  opacity: 1,
-                  scale: [0.3, 1.2, 1],
-                }}
+                animate={{ opacity: 1, scale: [0.3, 1.2, 1] }}
                 exit={{ opacity: 0, scale: 0.3 }}
                 transition={{
                   duration: 0.4,
                   ease: [0.175, 0.885, 0.32, 1.275],
-                  scale: {
-                    times: [0, 0.6, 1],
-                  },
+                  scale: { times: [0, 0.6, 1] },
                 }}
                 className="absolute inset-0 flex items-center justify-center"
                 aria-hidden="true"
@@ -104,7 +96,7 @@ export function ThemeToggle() {
           aria-checked={theme === "light"}
           aria-label="Switch to light theme"
         >
-          Light
+          {t("light")}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme("dark")}
@@ -113,7 +105,7 @@ export function ThemeToggle() {
           aria-checked={theme === "dark"}
           aria-label="Switch to dark theme"
         >
-          Dark
+          {t("dark")}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme("system")}
@@ -122,7 +114,7 @@ export function ThemeToggle() {
           aria-checked={theme === "system"}
           aria-label="Use system theme"
         >
-          System
+          {t("system")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

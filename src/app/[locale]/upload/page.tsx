@@ -11,8 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { db } from "@/lib/firebase/config";
-import { setDoc, doc } from "firebase/firestore";
+import { upsertAlbum, upsertArtist, upsertTrack } from "@/lib/firebase/upload-service";
 import { getRandomNum, setDelay } from "@/lib/utils";
 
 type SpotifyData = {
@@ -153,7 +152,7 @@ const getAlbumAndUpload = async (
               ?.preview_url /* 앨범의 두번째 트랙의 프리뷰를 가져옴. 앨범의 타이틀곡을 가져오고 싶은데 불가능한 것 같다...*/,
         };
 
-        await setDoc(doc(db, "albums", album.id), docData);
+        await upsertAlbum(album.id, docData);
         toast({
           title: "✅ 데이터 업로드 성공",
           description: `앨범 : ${album.name}`,
@@ -233,7 +232,7 @@ const getArtistAndUpload = async (
           preview_url: top_tracks.tracks[0]?.preview_url,
         };
 
-        await setDoc(doc(db, "artists", artist.id), docData);
+        await upsertArtist(artist.id, docData);
         toast({
           title: "✅ 데이터 업로드 성공",
           description: `아티스트 : ${artist.name}`,
@@ -337,7 +336,7 @@ const getTrackAndUpload = async (
           preview_url: track.preview_url,
         };
 
-        await setDoc(doc(db, "tracks", track.id), docData);
+        await upsertTrack(track.id, docData);
         toast({
           title: "✅ 데이터 업로드 성공",
           description: `트랙 : ${track.name}`,

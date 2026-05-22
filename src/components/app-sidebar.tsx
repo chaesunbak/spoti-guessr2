@@ -15,15 +15,18 @@ import {
   SidebarMenuSubButton,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 
-export function AppSidebar() {
+export async function AppSidebar() {
+  const t = await getTranslations("navigation");
+
   return (
     <Sidebar
       collapsible="icon"
@@ -40,7 +43,7 @@ export function AppSidebar() {
                   <Link
                     href="/"
                     className="flex items-center gap-2 p-2"
-                    title="Home"
+                    title={t("home")}
                     aria-label="Go to home page"
                   >
                     <Image
@@ -50,7 +53,7 @@ export function AppSidebar() {
                       height={32}
                       className="rounded-full"
                     />
-                    <span className="text-xl font-bold">Spoti-Guessr</span>
+                    <span className="text-xl font-bold">{t("appName")}</span>
                   </Link>
                 </SidebarMenuButton>
               </CollapsibleTrigger>
@@ -65,24 +68,24 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent className="flex flex-col justify-between">
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("application")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild title="Home">
+                <SidebarMenuButton asChild title={t("home")}>
                   <Link href="/" aria-label="Navigate to home page">
                     <Home aria-hidden="true" />
-                    <span>Home</span>
+                    <span>{t("home")}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <Collapsible defaultOpen className="group/collapsible">
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton asChild title="Game">
+                    <SidebarMenuButton asChild title={t("game")}>
                       <Link href="/game" aria-label="Open game modes menu">
                         <Play aria-hidden="true" />
-                        <span>Game</span>
+                        <span>{t("game")}</span>
                         <ChevronRight
                           className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
                           aria-hidden="true"
@@ -93,12 +96,12 @@ export function AppSidebar() {
                   <CollapsibleContent>
                     <SidebarMenuSub role="menu" aria-label="Game modes">
                       <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild title="Artists">
+                        <SidebarMenuSubButton asChild title={t("artists")}>
                           <Link
                             href="/game/artists"
                             aria-label="Play artists game mode"
                           >
-                            <span>Artists</span>
+                            <span>{t("artists")}</span>
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
@@ -107,12 +110,12 @@ export function AppSidebar() {
                   <CollapsibleContent>
                     <SidebarMenuSub role="menu" aria-label="Game modes">
                       <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild title="Albums">
+                        <SidebarMenuSubButton asChild title={t("albums")}>
                           <Link
                             href="/game/albums"
                             aria-label="Play albums game mode"
                           >
-                            <span>Albums</span>
+                            <span>{t("albums")}</span>
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
@@ -121,12 +124,12 @@ export function AppSidebar() {
                   <CollapsibleContent>
                     <SidebarMenuSub role="menu" aria-label="Game modes">
                       <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild title="Tracks">
+                        <SidebarMenuSubButton asChild title={t("tracks")}>
                           <Link
                             href="/game/tracks"
                             aria-label="Play tracks game mode"
                           >
-                            <span>Tracks</span>
+                            <span>{t("tracks")}</span>
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
@@ -147,10 +150,10 @@ export function AppSidebar() {
           <div className="space-y-2 text-xs font-normal">
             <nav className="flex flex-col gap-1" aria-label="Legal links">
               <Link href="/terms" className="hover:text-foreground">
-                Terms of Service
+                {t("termsOfService")}
               </Link>
               <Link href="/privacy" className="hover:text-foreground">
-                Privacy Policy
+                {t("privacyPolicy")}
               </Link>
               <a
                 href="https://github.com/chaesunbak/spoti-guessr2"
@@ -158,19 +161,15 @@ export function AppSidebar() {
                 rel="noopener noreferrer"
                 className="hover:text-foreground"
               >
-                Source Code
+                {t("sourceCode")}
               </a>
             </nav>
 
-            <p className="text-xs">
-              Spoti-Guessr is an open-source project. All game data may differ
-              from actual Spotify data.
-            </p>
+            <p className="text-xs">{t("disclaimer")}</p>
 
             <div className="pt-2">
-              <p className="pt-2 text-xs">
-                Powered by Chaesunbak
-                <br />© 2025 Chaesunbak. All rights reserved.
+              <p className="pt-2 text-xs" style={{ whiteSpace: "pre-line" }}>
+                {t("copyright")}
               </p>
             </div>
           </div>

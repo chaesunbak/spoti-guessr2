@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { useAudioPlayer } from "@/hooks/use-audio-player";
-import { AudioControlButton } from "@/app/game/[mode]/play/_components/audio-control-button";
+import { AudioControlButton } from "@/app/[locale]/game/[mode]/play/_components/audio-control-button";
 import { useMuteStore } from "@/providers/mute-store-provider";
 
 interface GameCardProps {
@@ -53,7 +53,6 @@ export function GameCard({
     },
   });
 
-  //Mute audio if user is muted
   useEffect(() => {
     if (audioRef?.current) {
       audioRef.current.muted = isMuted;
@@ -73,7 +72,6 @@ export function GameCard({
       data-card-index={dataCardIndex}
       aria-label={ariaLabel || `Select ${data.name}`}
     >
-      {/* Background Image with Blur */}
       <div
         className="absolute inset-0 z-10 animate-slow-spin"
         style={{

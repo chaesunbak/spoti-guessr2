@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase/config";
+import { signInWithGoogle } from "@/lib/firebase/auth-service";
+import { getUser, createUser } from "@/lib/firebase/user-service";
 import { getRandomNickname } from "@/lib/utils";
 import type { User } from "@/types/user";
 import { useToast } from "@/hooks/use-toast";
@@ -14,21 +13,17 @@ export const useContinueWithGoogle = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
   const loginUser = useAuthStore((state) => state.loginUser);
-  const provider = new GoogleAuthProvider();
   const { toast } = useToast();
   const router = useRouter();
 
   const continueWithGoogle = async () => {
     setLoading(true);
     try {
-      const result = await signInWithPopup(auth, provider);
+      const result = await signInWithGoogle();
       const newUser = result.user;
-      const userRef = doc(db, "users", newUser.uid);
-      const userSnap = await getDoc(userRef);
+      const userDoc = await getUser(newUser.uid);
 
-      if (userSnap.exists()) {
-        const userDoc = userSnap.data() as User;
-
+      if (userDoc) {
         console.log("User data for token:", userDoc);
 
         // Request token from server
@@ -54,15 +49,15 @@ export const useContinueWithGoogle = () => {
         router.push("/");
       } else {
         // signup
-        const userDoc = {
+        const newUserDoc: User = {
           uid: newUser.uid,
-          email: newUser.email,
+          email: newUser.email ?? "",
           nickname: getRandomNickname(),
           createdAt: Date.now(),
           permission: "read-only",
         };
-        await setDoc(doc(db, "users", newUser.uid), userDoc);
-        loginUser(userDoc as User);
+        await createUser(newUser.uid, newUserDoc);
+        loginUser(newUserDoc);
 
         toast({
           title: "Welcome to Spoti-Guessr!",

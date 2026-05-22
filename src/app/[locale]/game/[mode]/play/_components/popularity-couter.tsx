@@ -1,6 +1,7 @@
 import { motion, animate, useMotionValue, useTransform } from "framer-motion";
 import { useEffect } from "react";
 import { Crown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function PopularityCounter({
   to,
@@ -9,6 +10,7 @@ export function PopularityCounter({
   to: number;
   isWinner: boolean;
 }) {
+  const t = useTranslations("popularity");
   const count = useMotionValue(0);
   const rounded = useTransform(count, Math.round);
 
@@ -31,8 +33,7 @@ export function PopularityCounter({
         </motion.span>
       )}
       <motion.span className="font-bold">{rounded}</motion.span>
-
-      <span>points</span>
+      <span>{t("points")}</span>
     </span>
   );
 }

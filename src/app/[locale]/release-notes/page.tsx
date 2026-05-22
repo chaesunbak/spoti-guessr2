@@ -1,13 +1,19 @@
 import releaseNotes from "@/data/release-notes.json";
+import { getTranslations } from "next-intl/server";
 
-export const metadata = {
-  title: "Release Notes | Spoti-Guessr",
-};
+export async function generateMetadata() {
+  const t = await getTranslations("releaseNotes");
+  return {
+    title: `${t("title")} | Spoti-Guessr`,
+  };
+}
 
-export default function ReleaseNotesPage() {
+export default async function ReleaseNotesPage() {
+  const t = await getTranslations("releaseNotes");
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-2 lg:p-4">
-      <h2>Release Notes</h2>
+      <h2>{t("title")}</h2>
       <div className="flex flex-col gap-6">
         {releaseNotes.map((release) => (
           <section
@@ -26,7 +32,7 @@ export default function ReleaseNotesPage() {
             {release.features.length > 0 && (
               <div className="mb-3">
                 <h4 className="mb-1 text-sm font-semibold text-green-600 dark:text-green-400">
-                  New Features
+                  {t("newFeatures")}
                 </h4>
                 <ul className="list-inside list-disc space-y-1 pl-2 text-sm text-muted-foreground">
                   {release.features.map((feature) => (
@@ -39,7 +45,7 @@ export default function ReleaseNotesPage() {
             {release.fixes.length > 0 && (
               <div className="mb-3">
                 <h4 className="mb-1 text-sm font-semibold text-blue-600 dark:text-blue-400">
-                  Bug Fixes
+                  {t("bugFixes")}
                 </h4>
                 <ul className="list-inside list-disc space-y-1 pl-2 text-sm text-muted-foreground">
                   {release.fixes.map((fix) => (
@@ -52,7 +58,7 @@ export default function ReleaseNotesPage() {
             {release.breaking.length > 0 && (
               <div>
                 <h4 className="mb-1 text-sm font-semibold text-red-600 dark:text-red-400">
-                  Breaking Changes
+                  {t("breakingChanges")}
                 </h4>
                 <ul className="list-inside list-disc space-y-1 pl-2 text-sm text-muted-foreground">
                   {release.breaking.map((change) => (

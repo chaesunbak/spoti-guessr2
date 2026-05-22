@@ -5,19 +5,19 @@ import {
   GameMode,
   GameGenre,
 } from "@/types/game";
-import { GameContainer } from "@/app/game/[mode]/play/_components/game-container";
+import { GameContainer } from "@/app/[locale]/game/[mode]/play/_components/game-container";
 import { Metadata } from "next";
 
 interface PageProps {
   params: Promise<{
     mode: string;
+    locale: string;
   }>;
   searchParams: Promise<{
     genre?: string;
   }>;
 }
 
-// 동적 메타데이터 생성
 export async function generateMetadata({
   params,
   searchParams,
@@ -35,7 +35,6 @@ export default async function Page({ params, searchParams }: PageProps) {
   const mode = (await params).mode as GameMode;
   const genre = (await searchParams).genre;
 
-  // 허용된 모드와 장르인지 확인
   if (
     !ALLOWED_MODES.includes((await params).mode as GameMode) ||
     !genre ||

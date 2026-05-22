@@ -10,11 +10,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useLogout } from "@/hooks/use-logout";
 import { useAuthStore } from "@/providers/auth-store-provider";
+import { useTranslations } from "next-intl";
 
 export function UserProfile() {
+  const t = useTranslations("userProfile");
   const user = useAuthStore((state) => state.user);
   const { handleLogout } = useLogout();
 
@@ -31,20 +33,24 @@ export function UserProfile() {
       <DropdownMenuContent align="end">
         {user ? (
           <>
-            <DropdownMenuLabel>Hello, {user?.nickname}</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              {t("hello", { name: user.nickname })}
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href="/profile" className="w-full">
-                Profile
+                {t("profile")}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
+              {t("logOut")}
+            </DropdownMenuItem>
           </>
         ) : (
           <DropdownMenuItem asChild>
             <Link href="/auth" className="w-full">
-              Sign in
+              {t("signIn")}
             </Link>
           </DropdownMenuItem>
         )}

@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import { ALLOWED_MODES, ALLOWED_GENRES, GameMode } from "@/types/game";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { getTranslations } from "next-intl/server";
 
 const gradientClasses = {
   all: "bg-gradient-to-br from-violet-700 via-fuchsia-500 to-orange-500",
@@ -24,21 +25,22 @@ const gradientClasses = {
 interface PageProps {
   params: Promise<{
     mode: string;
+    locale: string;
   }>;
 }
 
 export default async function Page({ params }: PageProps) {
-  const mode = (await params).mode as GameMode;
+  const { mode } = await params;
+  const t = await getTranslations("gameMode");
 
-  // 허용된 모드인지 확인
-  if (!ALLOWED_MODES.includes(mode)) {
+  if (!ALLOWED_MODES.includes(mode as GameMode)) {
     notFound();
   }
 
   return (
     <div className="flex flex-1 flex-col gap-2 p-4 lg:gap-4" role="main">
       <h1 id="page-title" className="capitalize">
-        Select Genre for {mode} Mode
+        {t("selectGenre", { mode })}
       </h1>
       <nav
         className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-4"
@@ -58,7 +60,7 @@ export default async function Page({ params }: PageProps) {
                 className={cn(
                   "relative h-full w-full overflow-hidden p-4 transition-all duration-300 lg:p-6",
                   gradientClass ||
-                    "bg-gradient-to-br from-gray-500 via-slate-500 to-zinc-500", // Fallback gradient
+                    "bg-gradient-to-br from-gray-500 via-slate-500 to-zinc-500",
                 )}
               >
                 <CardHeader className="relative z-10 flex h-full flex-col justify-end p-0">
@@ -76,11 +78,4 @@ export default async function Page({ params }: PageProps) {
       </nav>
     </div>
   );
-}
-
-// 정적으로 가능한 경로 생성
-export function generateStaticParams() {
-  return ALLOWED_MODES.map((mode) => ({
-    mode: mode,
-  }));
 }

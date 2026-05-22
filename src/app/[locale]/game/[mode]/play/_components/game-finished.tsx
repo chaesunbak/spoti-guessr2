@@ -10,7 +10,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 interface GameFinishedProps {
   mode: GameMode;
@@ -31,10 +32,10 @@ export function GameFinished({
   endTime,
   onRestart,
 }: GameFinishedProps) {
+  const t = useTranslations("gameFinished");
   const [isSharing, setIsSharing] = useState(false);
   const { toast } = useToast();
 
-  // calculate game duration
   const gameDuration =
     startTime && endTime
       ? Math.floor((endTime.getTime() - startTime.getTime()) / 1000)
@@ -42,54 +43,43 @@ export function GameFinished({
 
   const minutes = Math.floor(gameDuration / 60);
   const seconds = gameDuration % 60;
-
-  // calculate average score
   const averageScore = Math.round(score / currentRound);
+  const timeStr = `${minutes}:${seconds.toString().padStart(2, "0")}`;
 
-  // create text to share
-  const getShareText = () => {
-    return (
-      `🎮 Spoti-Guessr Results\n\n` +
-      `🏆 Score: ${score}\n` +
-      `🎯 Rounds: ${currentRound}\n` +
-      `⌛ Time: ${minutes}:${seconds.toString().padStart(2, "0")}\n` +
-      `📊 Avg Score: ${averageScore}\n` +
-      `🎵 Mode: ${mode}\n` +
-      `🎸 Genre: ${genre}\n\n` +
-      `Play now at https://spoti-guessr.vercel.app`
-    );
-  };
-
-  // 결과 공유하기
   const handleShare = async () => {
     setIsSharing(true);
     try {
-      const shareText = getShareText();
+      const shareText = t("shareText", {
+        score,
+        rounds: currentRound,
+        time: timeStr,
+        avg: averageScore,
+        mode,
+        genre,
+      });
 
-      // check if navigator.share is supported
       if (navigator.share) {
         await navigator.share({
-          title: "Spoti-Guessr Results",
+          title: t("shareTitle"),
           text: shareText,
         });
         toast({
-          title: "Thanks for sharing!",
-          description: "Your friends will love it!",
+          title: t("shareThanks"),
+          description: t("shareThankDesc"),
           duration: 2000,
         });
       } else {
-        // if navigator.share is not supported, copy to clipboard
         await navigator.clipboard.writeText(shareText);
         toast({
-          title: "Results copied to clipboard!",
-          description: "You can paste it anywhere you want.",
+          title: t("shareCopied"),
+          description: t("shareCopiedDesc"),
           duration: 2000,
         });
       }
     } catch {
       toast({
-        title: "Failed to share results",
-        description: "Please try again.",
+        title: t("shareFailed"),
+        description: t("shareFailedDesc"),
         duration: 2000,
         variant: "destructive",
       });
@@ -105,16 +95,14 @@ export function GameFinished({
       aria-label="Game results"
     >
       <h2 role="status" aria-label="Game finished">
-        Game Over!
+        {t("gameOver")}
       </h2>
 
-      {/* Stats Cards */}
       <div
         className="grid w-full max-w-3xl grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:gap-6"
         role="group"
         aria-label="Game statistics"
       >
-        {/* Final Score */}
         <div
           className="flex flex-row items-center justify-between gap-2 rounded-lg bg-muted p-4 sm:flex-col sm:justify-center md:p-6"
           role="status"
@@ -125,12 +113,13 @@ export function GameFinished({
               className="h-6 w-6 text-yellow-500 md:h-8 md:w-8"
               aria-hidden="true"
             />
-            <span className="text-sm text-muted-foreground">Final Score</span>
+            <span className="text-sm text-muted-foreground">
+              {t("finalScore")}
+            </span>
           </div>
           <span className="text-2xl font-bold md:text-3xl">{score}</span>
         </div>
 
-        {/* Rounds Played */}
         <div
           className="flex flex-row items-center justify-between gap-2 rounded-lg bg-muted p-4 sm:flex-col sm:justify-center md:p-6"
           role="status"
@@ -141,12 +130,13 @@ export function GameFinished({
               className="h-6 w-6 text-blue-500 md:h-8 md:w-8"
               aria-hidden="true"
             />
-            <span className="text-sm text-muted-foreground">Rounds Played</span>
+            <span className="text-sm text-muted-foreground">
+              {t("roundsPlayed")}
+            </span>
           </div>
           <span className="text-2xl font-bold md:text-3xl">{currentRound}</span>
         </div>
 
-        {/* Time Played */}
         <div
           className="col-span-1 flex flex-row items-center justify-between gap-2 rounded-lg bg-muted p-4 sm:col-span-2 sm:flex-col sm:justify-center md:col-span-1 md:p-6"
           role="status"
@@ -157,15 +147,14 @@ export function GameFinished({
               className="h-6 w-6 text-green-500 md:h-8 md:w-8"
               aria-hidden="true"
             />
-            <span className="text-sm text-muted-foreground">Time Played</span>
+            <span className="text-sm text-muted-foreground">
+              {t("timePlayed")}
+            </span>
           </div>
-          <span className="text-2xl font-bold md:text-3xl">
-            {minutes}:{seconds.toString().padStart(2, "0")}
-          </span>
+          <span className="text-2xl font-bold md:text-3xl">{timeStr}</span>
         </div>
       </div>
 
-      {/* Additional Stats */}
       <div
         className="w-full max-w-3xl space-y-2 px-4 text-left lg:text-center"
         role="region"
@@ -176,24 +165,24 @@ export function GameFinished({
           role="list"
         >
           <p role="listitem">
-            Average Score: <span className="font-bold">{averageScore}</span>
+            {t("averageScore")}:{" "}
+            <span className="font-bold">{averageScore}</span>
           </p>
           <p role="listitem">
-            Mode: <span className="font-bold capitalize">{mode}</span>
+            {t("mode")}:{" "}
+            <span className="font-bold capitalize">{mode}</span>
           </p>
           <p role="listitem">
-            Genre: <span className="font-bold">{genre}</span>
+            {t("genre")}: <span className="font-bold">{genre}</span>
           </p>
         </div>
       </div>
 
-      {/* Actions */}
       <div
         className="grid w-full max-w-3xl grid-cols-1 gap-3 px-4 sm:grid-cols-3 sm:gap-4"
         role="group"
         aria-label="Game actions"
       >
-        {/* Restart Game */}
         <Button
           size="lg"
           onClick={onRestart}
@@ -201,10 +190,9 @@ export function GameFinished({
           aria-label="Play another game with same settings"
         >
           <RotateCcw className="h-5 w-5" aria-hidden="true" />
-          Play Again
+          {t("playAgain")}
         </Button>
 
-        {/* Share Results */}
         <Button
           size="lg"
           variant="secondary"
@@ -214,10 +202,9 @@ export function GameFinished({
           aria-label="Share your game results"
         >
           <Share2 className="h-5 w-5" aria-hidden="true" />
-          Share Results
+          {t("shareResults")}
         </Button>
 
-        {/* Choose Mode */}
         <Button size="lg" variant="secondary" asChild>
           <Link
             href="/game"
@@ -225,7 +212,7 @@ export function GameFinished({
             aria-label="Return to game mode selection"
           >
             <Home className="h-5 w-5" aria-hidden="true" />
-            Choose Mode
+            {t("chooseMode")}
           </Link>
         </Button>
       </div>

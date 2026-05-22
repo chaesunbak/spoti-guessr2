@@ -1,10 +1,14 @@
 import Image from "next/image";
 import { Play, ChartBarDecreasing } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import releaseNotes from "@/data/release-notes.json";
+import { getTranslations } from "next-intl/server";
 
-export default function Home() {
+export default async function Home() {
+  const t = await getTranslations("home");
+  const nav = await getTranslations("navigation");
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-2 lg:p-4">
       <div className="grid h-full w-full auto-rows-min gap-4 md:grid-cols-3">
@@ -12,7 +16,7 @@ export default function Home() {
           <div className="flex h-full flex-col justify-between gap-8">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <h1>Spoti-Guessr</h1>
+                <h1>{nav("appName")}</h1>
                 <Image
                   src="/logo.png"
                   alt="Spoti-Guessr"
@@ -22,19 +26,20 @@ export default function Home() {
                 />
               </div>
               <p className="max-w-lg text-muted-foreground">
-                What&apos;s trending? Compare songs, artists, and albums to
-                guess which one is more popular on{" "}
-                <a
-                  href="https://open.spotify.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-bold text-[#81b71a] hover:underline"
-                  tabIndex={-1}
-                  aria-label="Visit Spotify's official website"
-                >
-                  Spotify
-                </a>
-                .
+                {t.rich("description", {
+                  spotify: (chunks) => (
+                    <a
+                      href="https://open.spotify.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold text-[#81b71a] hover:underline"
+                      tabIndex={-1}
+                      aria-label="Visit Spotify's official website"
+                    >
+                      {chunks}
+                    </a>
+                  ),
+                })}
               </p>
             </div>
             <div
@@ -45,10 +50,9 @@ export default function Home() {
               <Button variant="default" asChild>
                 <Link href="/game" aria-label="Start playing the game">
                   <Play className="mr-2 h-4 w-4" aria-hidden="true" />
-                  Start Playing
+                  {t("startPlaying")}
                 </Link>
               </Button>
-              {/* TODO : Add Leaderboard Page */}
               <Button
                 variant="secondary"
                 asChild
@@ -57,7 +61,7 @@ export default function Home() {
               >
                 <a>
                   <ChartBarDecreasing aria-hidden="true" />
-                  View Leaderboard
+                  {t("viewLeaderboard")}
                 </a>
               </Button>
             </div>
@@ -69,15 +73,15 @@ export default function Home() {
           aria-label="View all release notes"
         >
           <div className="flex h-full flex-col justify-between">
-            <h3 className="mb-2">Release Notes</h3>
+            <h3 className="mb-2">{t("releaseNotes")}</h3>
             <div className="scrollbar-none flex-1 space-y-1 overflow-y-auto text-xs text-muted-foreground md:text-sm">
               {releaseNotes[0] && (
                 <>
-                  <p>Current Version: {releaseNotes[0].version}</p>
-                  <p>Last Updated: {releaseNotes[0].date}</p>
+                  <p>{t("currentVersion", { version: releaseNotes[0].version })}</p>
+                  <p>{t("lastUpdated", { date: releaseNotes[0].date })}</p>
                   {releaseNotes[0].features.length > 0 && (
                     <>
-                      <p>New Features:</p>
+                      <p>{t("newFeatures")}</p>
                       <ul
                         className="list-inside list-disc space-y-1 pl-2"
                         role="list"
