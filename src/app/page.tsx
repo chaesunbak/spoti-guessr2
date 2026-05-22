@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Play, ChartBarDecreasing } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import releaseNotes from "@/data/release-notes.json";
 
 export default function Home() {
   return (
@@ -62,25 +63,37 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="aspect-video rounded-xl bg-muted/50 p-2 transition-all duration-300 hover:bg-muted/70 md:p-4 lg:p-6">
+        <Link
+          href="/release-notes"
+          className="aspect-video rounded-xl bg-muted/50 p-2 transition-all duration-300 hover:bg-muted/70 md:p-4 lg:p-6"
+          aria-label="View all release notes"
+        >
           <div className="flex h-full flex-col justify-between">
             <h3 className="mb-2">Release Notes</h3>
             <div className="scrollbar-none flex-1 space-y-1 overflow-y-auto text-xs text-muted-foreground md:text-sm">
-              <p>Current Version: v0.1.0</p>
-              <p>Last Updated: February 2025</p>
-              <p>New Features:</p>
-              <ul
-                className="list-inside list-disc space-y-1 pl-2"
-                role="list"
-                aria-label="New features"
-              >
-                <li>New Fancy Layout</li>
-                <li>Game Feature</li>
-                <li>Migration to Next.js</li>
-              </ul>
+              {releaseNotes[0] && (
+                <>
+                  <p>Current Version: {releaseNotes[0].version}</p>
+                  <p>Last Updated: {releaseNotes[0].date}</p>
+                  {releaseNotes[0].features.length > 0 && (
+                    <>
+                      <p>New Features:</p>
+                      <ul
+                        className="list-inside list-disc space-y-1 pl-2"
+                        role="list"
+                        aria-label="New features"
+                      >
+                        {releaseNotes[0].features.map((feature) => (
+                          <li key={feature}>{feature}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </>
+              )}
             </div>
           </div>
-        </section>
+        </Link>
         <div
           className="aspect-video rounded-xl bg-muted/50 transition-all duration-300 hover:bg-muted/70"
           aria-hidden="true"
