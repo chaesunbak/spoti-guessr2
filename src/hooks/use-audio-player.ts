@@ -4,7 +4,6 @@ import { useMuteStore } from "@/providers/mute-store-provider";
 interface UseAudioPlayerProps {
   url: string | null;
   isPlaying: boolean;
-
   onPlayStateChange: (isPlaying: boolean) => void;
 }
 
@@ -17,52 +16,64 @@ export function useAudioPlayer({
   const [paused, setPaused] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { isMuted } = useMuteStore((state) => state);
+  // Store callback in ref so effects don't re-run when inline function identity changes each render
+  const onPlayStateChangeRef = useRef(onPlayStateChange);
+  useEffect(() => {
+    onPlayStateChangeRef.current = onPlayStateChange;
+  });
+  // Track the last loaded URL to avoid resetting audio on every render
+  const loadedUrlRef = useRef<string | null>(null);
 
-  // Mute audio if user is muted
   useEffect(() => {
     if (audioRef?.current) {
       audioRef.current.muted = isMuted;
     }
   }, [isMuted]);
 
-  // When isPlaying state changes, handle audio playback/pause
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !url) return;
 
-    const playAudio = async () => {
-      if (isPlaying && !paused) {
-        try {
-          audio.src = url;
-          await audio.play();
-        } catch (error) {
+    let playPromise: Promise<void> | null = null;
+
+    if (isPlaying && !paused) {
+      if (loadedUrlRef.current !== url) {
+        audio.src = url;
+        loadedUrlRef.current = url;
+      }
+      playPromise = audio.play();
+      playPromise.catch((error) => {
+        if (error.name !== "AbortError") {
           console.error("Audio playback failed:", error);
-          onPlayStateChange(false);
+          onPlayStateChangeRef.current(false);
         }
+      });
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
+    return () => {
+      if (playPromise) {
+        playPromise
+          .then(() => {
+            audio.pause();
+            audio.currentTime = 0;
+          })
+          .catch(() => {});
       } else {
         audio.pause();
         audio.currentTime = 0;
       }
     };
+  }, [isPlaying, url, paused]); // onPlayStateChange intentionally excluded — stored in ref above
 
-    playAudio();
-
-    // When the component unmounts or isPlaying changes, cleanup
-    return () => {
-      if (audio) {
-        audio.pause();
-        audio.currentTime = 0;
-      }
-    };
-  }, [isPlaying, url, paused, onPlayStateChange]);
-
-  // When audio ends, handle audio playback/pause
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     const handleEnded = () => {
-      onPlayStateChange(false);
+      onPlayStateChangeRef.current(false);
       audio.currentTime = 0;
     };
 
@@ -78,7 +89,7 @@ export function useAudioPlayer({
       audio.removeEventListener("ended", handleEnded);
       audio.removeEventListener("timeupdate", handleTimeUpdate);
     };
-  }, [onPlayStateChange]);
+  }, []); // empty deps — callback accessed via ref
 
   const togglePlay = () => {
     if (!url) return;
@@ -87,17 +98,17 @@ export function useAudioPlayer({
       setPaused(false);
     }
 
-    onPlayStateChange(!isPlaying);
+    onPlayStateChangeRef.current(!isPlaying);
   };
 
   const onMouseEnter = () => {
     if (!url || paused) return;
-    onPlayStateChange(true);
+    onPlayStateChangeRef.current(true);
   };
 
   const onMouseLeave = () => {
     if (!url || paused) return;
-    onPlayStateChange(false);
+    onPlayStateChangeRef.current(false);
   };
 
   return {

@@ -105,10 +105,6 @@ export async function AppSidebar() {
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                  <CollapsibleContent>
-                    <SidebarMenuSub role="menu" aria-label="Game modes">
                       <SidebarMenuSubItem>
                         <SidebarMenuSubButton asChild title={t("albums")}>
                           <Link
@@ -119,10 +115,6 @@ export async function AppSidebar() {
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                  <CollapsibleContent>
-                    <SidebarMenuSub role="menu" aria-label="Game modes">
                       <SidebarMenuSubItem>
                         <SidebarMenuSubButton asChild title={t("tracks")}>
                           <Link

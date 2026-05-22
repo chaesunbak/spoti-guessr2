@@ -19,7 +19,8 @@
     "searchContent": "Search content"
   },
   "home": {
-    "description": "What's trending? Compare songs, artists, and albums to guess which one is more popular on {spotify}.",
+    "descriptionBefore": "What's trending? Compare songs, artists, and albums to guess which one is more popular on",
+    "descriptionAfter": ".",
     "startPlaying": "Start Playing",
     "viewLeaderboard": "View Leaderboard",
     "releaseNotes": "Release Notes",
