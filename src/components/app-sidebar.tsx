@@ -168,7 +168,6 @@ export function AppSidebar() {
             </p>
 
             <div className="pt-2">
-              <p className="text-xs">Contact: support@spotiguessr.com</p>
               <p className="pt-2 text-xs">
                 Powered by Chaesunbak
                 <br />© 2025 Chaesunbak. All rights reserved.
