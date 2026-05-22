@@ -21,7 +21,50 @@ type SpotifyData = {
   url: string;
 };
 
-const getAlbumAndUpload = async (ids: string[], token: string, toast: any) => {
+type ToastFn = (opts: {
+  title: string;
+  description?: string;
+  variant?: "default" | "destructive";
+}) => void;
+
+type SpotifyArtistRef = { id: string; name: string };
+type SpotifyArtistFull = SpotifyArtistRef & {
+  genres: string[];
+  external_urls: { spotify: string };
+  followers: { total: number };
+  images: { url: string }[];
+  popularity: number;
+  type: string;
+};
+type SpotifyAlbum = {
+  id: string;
+  name: string;
+  type: string;
+  album_type: string;
+  external_urls: { spotify: string };
+  artists: SpotifyArtistRef[];
+  images: { url: string }[];
+  release_date: string;
+  popularity: number;
+  tracks: { items: ({ preview_url: string | null } | null)[] };
+};
+type SpotifyTrack = {
+  id: string;
+  name: string;
+  type: string;
+  explicit: boolean;
+  external_urls: { spotify: string };
+  artists: SpotifyArtistRef[];
+  album: { name: string; images: { url: string }[]; release_date: string };
+  popularity: number;
+  preview_url: string | null;
+};
+
+const getAlbumAndUpload = async (
+  ids: string[],
+  token: string,
+  toast: ToastFn,
+) => {
   // ID 배열을 20개 단위로 분할
   const chunkedIds = [];
   for (let i = 0; i < ids.length; i += 20) {
@@ -49,8 +92,8 @@ const getAlbumAndUpload = async (ids: string[], token: string, toast: any) => {
       const albumsData = await albumsResponse.json();
 
       // 모든 첫 번째 아티스트의 ID를 모음
-      const artistIds = albumsData.albums
-        .map((album: any) => album.artists[0].id)
+      const artistIds = (albumsData.albums as SpotifyAlbum[])
+        .map((album) => album.artists[0].id)
         .join(",");
 
       // 한 번에 모든 아티스트 정보를 가져옴
@@ -71,12 +114,15 @@ const getAlbumAndUpload = async (ids: string[], token: string, toast: any) => {
       const artistsData = await artistsResponse.json();
 
       // 아티스트 ID를 키로 하여 아티스트 정보를 매핑
-      const artistMap = artistsData.artists.reduce((map: any, artist: any) => {
-        map[artist.id] = artist;
-        return map;
-      }, {});
+      const artistMap = (artistsData.artists as SpotifyArtistFull[]).reduce(
+        (map: Record<string, SpotifyArtistFull>, artist) => {
+          map[artist.id] = artist;
+          return map;
+        },
+        {},
+      );
 
-      for (const album of albumsData.albums) {
+      for (const album of albumsData.albums as SpotifyAlbum[]) {
         const artist = artistMap[album.artists[0].id];
 
         const docData = {
@@ -123,7 +169,11 @@ const getAlbumAndUpload = async (ids: string[], token: string, toast: any) => {
   }
 };
 
-const getArtistAndUpload = async (ids: string[], token: string, toast: any) => {
+const getArtistAndUpload = async (
+  ids: string[],
+  token: string,
+  toast: ToastFn,
+) => {
   // ID 배열을 20개 단위로 분할
   const chunkedIds = [];
   for (let i = 0; i < ids.length; i += 20) {
@@ -199,7 +249,11 @@ const getArtistAndUpload = async (ids: string[], token: string, toast: any) => {
   }
 };
 
-const getTrackAndUpload = async (ids: string[], token: string, toast: any) => {
+const getTrackAndUpload = async (
+  ids: string[],
+  token: string,
+  toast: ToastFn,
+) => {
   // 20개 단위로 분할
   const chunkedIds = [];
   for (let i = 0; i < ids.length; i += 20) {
@@ -226,8 +280,8 @@ const getTrackAndUpload = async (ids: string[], token: string, toast: any) => {
       const tracksData = await tracksResponse.json();
 
       // 모든 첫 번째 아티스트의 ID를 모음
-      const artistIds = tracksData.tracks
-        .map((track: any) => track.artists[0].id)
+      const artistIds = (tracksData.tracks as SpotifyTrack[])
+        .map((track) => track.artists[0].id)
         .join(",");
 
       const artistsResponse = await fetch(
@@ -247,12 +301,15 @@ const getTrackAndUpload = async (ids: string[], token: string, toast: any) => {
       const artistsData = await artistsResponse.json();
 
       // 아티스트 ID를 키로 하여 아티스트 정보를 매핑
-      const artistMap = artistsData.artists.reduce((map: any, artist: any) => {
-        map[artist.id] = artist;
-        return map;
-      }, {});
+      const artistMap = (artistsData.artists as SpotifyArtistFull[]).reduce(
+        (map: Record<string, SpotifyArtistFull>, artist) => {
+          map[artist.id] = artist;
+          return map;
+        },
+        {},
+      );
 
-      for (const track of tracksData.tracks) {
+      for (const track of tracksData.tracks as SpotifyTrack[]) {
         const artist = artistMap[track.artists[0].id];
 
         const docData = {

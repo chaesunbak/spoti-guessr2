@@ -70,7 +70,7 @@ const tutorialSteps: TutorialStep[] = [
 
 const TUTORIAL_STORAGE_KEY = "spoti-guessr-tutorial-completed";
 
-export function GameReady({ mode, genre, onStart }: GameReadyProps) {
+export function GameReady({ mode, genre: _genre, onStart }: GameReadyProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [showTutorial, setShowTutorial] = useState(() => {
     const completed = localStorage.getItem(TUTORIAL_STORAGE_KEY);

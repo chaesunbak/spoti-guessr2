@@ -14,7 +14,7 @@ interface AudioControlProps {
 export function AudioControlButton({
   previewUrl,
   isPlaying,
-  paused,
+  paused: _paused,
   setPaused,
   togglePlay,
 }: AudioControlProps) {

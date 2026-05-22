@@ -54,7 +54,7 @@ export function useAudioPlayer({
         audio.currentTime = 0;
       }
     };
-  }, [isPlaying, url, paused]);
+  }, [isPlaying, url, paused, onPlayStateChange]);
 
   // When audio ends, handle audio playback/pause
   useEffect(() => {

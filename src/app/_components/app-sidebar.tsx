@@ -138,7 +138,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="@[13rem]:block hidden">
+      <SidebarFooter className="hidden @[13rem]:block">
         <footer
           className="border-t border-border/90 p-2 text-muted-foreground"
           role="contentinfo"

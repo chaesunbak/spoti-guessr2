@@ -86,7 +86,7 @@ export function GameFinished({
           duration: 2000,
         });
       }
-    } catch (error) {
+    } catch {
       toast({
         title: "Failed to share results",
         description: "Please try again.",

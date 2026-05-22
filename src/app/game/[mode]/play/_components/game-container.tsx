@@ -42,9 +42,11 @@ export function GameContainer({ mode, genre }: GameContainerProps) {
         ? "dark"
         : "light",
       connection_type:
-        typeof (navigator as any).connection?.effectiveType === "string"
-          ? (navigator as any).connection.effectiveType
-          : "unknown",
+        (
+          navigator as Navigator & {
+            connection?: { effectiveType?: string };
+          }
+        ).connection?.effectiveType ?? "unknown",
     });
   };
 

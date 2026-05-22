@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { GameMode, GameGenre } from "@/types/game";
 import { Button } from "@/components/ui/button";
 import { GameCard } from "@/app/game/[mode]/play/_components/game-card";
@@ -14,7 +14,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { XIcon, Heart, Flame, Crown } from "lucide-react";
+import { XIcon, Heart, Flame } from "lucide-react";
 import { useBeforeUnload } from "@/hooks/use-before-unload";
 import { sendGAEvent } from "@next/third-parties/google";
 import { SpotifyLogo } from "@/components/spotify-logo";
