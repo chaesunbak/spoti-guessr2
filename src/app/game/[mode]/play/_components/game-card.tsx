@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 import { AlertCircle } from "lucide-react";
 import type { GameItem } from "@/types/game";
 import { Progress } from "@/components/ui/progress";
@@ -36,8 +36,6 @@ export function GameCard({
   "aria-label": ariaLabel,
 }: GameCardProps) {
   const { isMuted } = useMuteStore((state) => state);
-
-  const imageRef = useRef<HTMLImageElement | null>(null);
 
   const {
     audioRef,
@@ -93,7 +91,6 @@ export function GameCard({
         aria-label={`Album artwork for ${data.name}`}
       >
         <Image
-          ref={imageRef as any}
           className="absolute left-1/2 top-1/2 z-20 h-auto max-h-[150px] w-auto max-w-[150px] -translate-x-1/2 -translate-y-1/2 transform rounded-md object-contain shadow-md transition duration-200 sm:max-h-[175px] sm:max-w-[175px] md:max-h-[200px] md:max-w-[200px] md:shadow-lg lg:max-h-[250px] lg:max-w-[250px]"
           src={data.image}
           alt={`Album artwork for ${data.name}`}

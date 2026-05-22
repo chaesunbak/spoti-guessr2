@@ -16,7 +16,7 @@ export function PopularityCounter({
     count.set(0);
     const controls = animate(count, to, { duration: 2 });
     return () => controls.stop();
-  }, [to]);
+  }, [to, count]);
 
   return (
     <span className="flex items-center gap-2">

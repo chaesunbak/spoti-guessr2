@@ -8,7 +8,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
-import { GameMode, GameGenre } from "@/types/game";
+import { GameMode, GameGenre, GameItem } from "@/types/game";
 import { getRandomNumber } from "@/lib/utils";
 import { sendGAEvent } from "@next/third-parties/google";
 
@@ -60,7 +60,7 @@ async function getRandomDocument(mode: GameMode, genre: GameGenre) {
 
     if (!querySnapshot.empty) {
       const doc = querySnapshot.docs[0];
-      return { id: doc.id, ...doc.data() } as any;
+      return { id: doc.id, ...doc.data() } as GameItem;
     }
     throw new Error("No documents found");
   } catch (error) {

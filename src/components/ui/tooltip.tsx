@@ -35,7 +35,7 @@ const TooltipContent = React.forwardRef<
         }}
         className={cn(
           "z-50 overflow-hidden rounded-md bg-popover px-3 py-1.5 text-xs text-popover-foreground",
-          className
+          className,
         )}
         {...(props as HTMLMotionProps<"div">)}
       />
