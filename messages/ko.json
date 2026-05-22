@@ -19,7 +19,8 @@
     "searchContent": "콘텐츠 검색"
   },
   "home": {
-    "description": "지금 무엇이 인기 있나요? 노래, 아티스트, 앨범을 비교하여 {spotify}에서 더 인기 있는 것을 맞춰보세요.",
+    "descriptionBefore": "지금 무엇이 인기 있나요? 노래, 아티스트, 앨범을 비교하여",
+    "descriptionAfter": "에서 더 인기 있는 것을 맞춰보세요.",
     "startPlaying": "게임 시작",
     "viewLeaderboard": "리더보드 보기",
     "releaseNotes": "릴리즈 노트",

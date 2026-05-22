@@ -26,20 +26,18 @@ export default async function Home() {
                 />
               </div>
               <p className="max-w-lg text-muted-foreground">
-                {t.rich("description", {
-                  spotify: (chunks) => (
-                    <a
-                      href="https://open.spotify.com/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-bold text-[#81b71a] hover:underline"
-                      tabIndex={-1}
-                      aria-label="Visit Spotify's official website"
-                    >
-                      {chunks}
-                    </a>
-                  ),
-                })}
+                {t("descriptionBefore")}{" "}
+                <a
+                  href="https://open.spotify.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-[#81b71a] hover:underline"
+                  tabIndex={-1}
+                  aria-label="Visit Spotify's official website"
+                >
+                  Spotify
+                </a>
+                {t("descriptionAfter")}
               </p>
             </div>
             <div
