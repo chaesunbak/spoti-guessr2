@@ -9,7 +9,6 @@
     "tracks": "Tracks",
     "termsOfService": "Terms of Service",
     "privacyPolicy": "Privacy Policy",
-    "leaderboard": "Leaderboard",
     "sourceCode": "Source Code",
     "disclaimer": "Spoti-Guessr is an open-source project. All game data may differ from actual Spotify data.",
     "copyright": "Powered by Chaesunbak\n© 2025 Chaesunbak. All rights reserved."
@@ -18,7 +17,6 @@
     "descriptionBefore": "What's trending? Compare songs, artists, and albums to guess which one is more popular on",
     "descriptionAfter": ".",
     "startPlaying": "Start Playing",
-    "viewLeaderboard": "View Leaderboard",
     "releaseNotes": "Release Notes",
     "currentVersion": "Current Version: {version}",
     "lastUpdated": "Last Updated: {date}",
@@ -162,48 +160,5 @@
   },
   "popularity": {
     "points": "points"
-  },
-  "leaderboard": {
-    "title": "Leaderboard",
-    "rank": "Rank",
-    "nickname": "Nickname",
-    "score": "Score",
-    "rounds": "Rounds",
-    "time": "Time",
-    "you": "You",
-    "empty": "No scores yet. Be the first to play!",
-    "loadError": "Failed to load leaderboard. Please try again.",
-    "selectGenre": "Select Genre",
-    "topN": "Showing Top {n} scores",
-    "mode": {
-      "artists": "Artists",
-      "albums": "Albums",
-      "tracks": "Tracks"
-    },
-    "genre": {
-      "all": "All",
-      "pop": "Pop",
-      "k_pop": "K-Pop",
-      "k_pop_girl_group": "K-Pop Girl Group",
-      "k_pop_boy_group": "K-Pop Boy Group",
-      "classic_k_pop": "Classic K-Pop",
-      "hip_hop": "Hip-Hop",
-      "k_rap": "K-Rap",
-      "rock": "Rock",
-      "classic_rock": "Classic Rock",
-      "k_indie": "K-Indie",
-      "trot": "Trot"
-    }
-  },
-  "submitScore": {
-    "submitting": "Submitting your score...",
-    "newRecord": "New Best Score!",
-    "keptRecord": "Your previous best record is higher.",
-    "submitError": "Failed to submit score. Please try again.",
-    "guestPrompt": "Register your score to the leaderboard!",
-    "nicknamePlaceholder": "Enter your nickname (2–16 chars)",
-    "nicknameError": "Nickname must be 2–16 characters.",
-    "submit": "Submit",
-    "viewLeaderboard": "View Leaderboard"
   }
 }

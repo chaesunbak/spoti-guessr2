@@ -1,4 +1,9 @@
-import { Home, Play, ChevronRight, Trophy, type LucideIcon } from "lucide-react";
+import {
+  Home,
+  Play,
+  ChevronRight,
+  type LucideIcon,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarHeader,
@@ -45,7 +50,6 @@ const navItems: NavItem[] = [
       { href: "/game/tracks", labelKey: "tracks" },
     ],
   },
-  { href: "/leaderboard", labelKey: "leaderboard", icon: Trophy },
 ];
 
 export async function AppSidebar() {
@@ -155,7 +159,7 @@ export async function AppSidebar() {
                                 data-sidebar="menu-sub-button"
                                 data-size="sm"
                                 data-active="false"
-                                className="flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-xs text-sidebar-foreground outline-none ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground"
+                                className="flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-xs text-sidebar-foreground outline-none ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0"
                               >
                                 <span>{t(child.labelKey)}</span>
                               </Link>
