@@ -5,7 +5,7 @@ import {
   GameMode,
   GameGenre,
 } from "@/types/game";
-import { GameContainer } from "@/app/[locale]/game/[mode]/play/_components/game-container";
+import { GameContainer } from "@/components/game/game-container";
 import { Metadata } from "next";
 
 interface PageProps {
