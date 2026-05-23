@@ -1,15 +1,9 @@
-import { Search, Home } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { UserProfile } from "@/components/user-profile";
 import { MuteToggle } from "@/components/mute-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/navigation";
-import { getTranslations } from "next-intl/server";
 
 export async function AppHeader() {
-  const t = await getTranslations("header");
 
   return (
     <header
