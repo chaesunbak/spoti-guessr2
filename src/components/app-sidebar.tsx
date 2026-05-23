@@ -1,9 +1,4 @@
-import {
-  Home,
-  Play,
-  ChevronRight,
-  type LucideIcon,
-} from "lucide-react";
+import { Home, Play, ChevronRight, type LucideIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarHeader,
@@ -183,12 +178,6 @@ export async function AppSidebar() {
         >
           <div className="space-y-2 text-xs font-normal">
             <nav className="flex flex-col gap-1" aria-label="Legal links">
-              <Link href="/terms" className="hover:text-foreground">
-                {t("termsOfService")}
-              </Link>
-              <Link href="/privacy" className="hover:text-foreground">
-                {t("privacyPolicy")}
-              </Link>
               <a
                 href="https://github.com/chaesunbak/spoti-guessr2"
                 target="_blank"
