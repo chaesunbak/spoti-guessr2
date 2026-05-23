@@ -7,8 +7,6 @@
     "artists": "아티스트",
     "albums": "앨범",
     "tracks": "트랙",
-    "termsOfService": "이용약관",
-    "privacyPolicy": "개인정보처리방침",
     "sourceCode": "소스 코드",
     "disclaimer": "Spoti-Guessr는 오픈 소스 프로젝트입니다. 모든 게임 데이터는 실제 Spotify 데이터와 다를 수 있습니다.",
     "copyright": "Chaesunbak 제공\n© 2025 Chaesunbak. 모든 권리 보유."
@@ -161,5 +159,48 @@
   },
   "popularity": {
     "points": "점"
+  },
+  "leaderboard": {
+    "title": "리더보드",
+    "rank": "순위",
+    "nickname": "닉네임",
+    "score": "점수",
+    "rounds": "라운드",
+    "time": "시간",
+    "you": "나",
+    "empty": "아직 기록이 없습니다. 첫 번째 플레이어가 되어보세요!",
+    "loadError": "리더보드를 불러오지 못했습니다. 다시 시도해 주세요.",
+    "selectGenre": "장르 선택",
+    "topN": "상위 {n}개 점수 표시",
+    "mode": {
+      "artists": "아티스트",
+      "albums": "앨범",
+      "tracks": "트랙"
+    },
+    "genre": {
+      "all": "전체",
+      "pop": "팝",
+      "k_pop": "K-Pop",
+      "k_pop_girl_group": "K-Pop 걸그룹",
+      "k_pop_boy_group": "K-Pop 보이그룹",
+      "classic_k_pop": "클래식 K-Pop",
+      "hip_hop": "힙합",
+      "k_rap": "K-Rap",
+      "rock": "록",
+      "classic_rock": "클래식 록",
+      "k_indie": "K-인디",
+      "trot": "트로트"
+    }
+  },
+  "submitScore": {
+    "submitting": "점수 등록 중...",
+    "newRecord": "새 최고 기록!",
+    "keptRecord": "이전 최고 기록이 더 높습니다.",
+    "submitError": "점수 등록에 실패했습니다. 다시 시도해 주세요.",
+    "guestPrompt": "리더보드에 점수를 등록하세요!",
+    "nicknamePlaceholder": "닉네임 입력 (2~16자)",
+    "nicknameError": "닉네임은 2~16자여야 합니다.",
+    "submit": "등록",
+    "viewLeaderboard": "리더보드 보기"
   }
 }
