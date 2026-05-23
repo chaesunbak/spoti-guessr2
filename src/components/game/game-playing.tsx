@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { GameMode, GameGenre } from "@/types/game";
 import { Button } from "@/components/ui/button";
-import { GameCard } from "@/app/[locale]/game/[mode]/play/_components/game-card";
+import { GameCard } from "@/components/game/game-card";
 import { useRandomGameData } from "@/hooks/use-random-game-data";
 import { motion } from "framer-motion";
 import {
@@ -18,7 +18,7 @@ import { XIcon, Heart, Flame } from "lucide-react";
 import { useBeforeUnload } from "@/hooks/use-before-unload";
 import { sendGAEvent } from "@next/third-parties/google";
 import { SpotifyLogo } from "@/components/spotify-logo";
-import { PopularityCounter } from "@/app/[locale]/game/[mode]/play/_components/popularity-couter";
+import { PopularityCounter } from "@/components/game/popularity-couter";
 import { useTranslations } from "next-intl";
 
 interface GamePlayingProps {
