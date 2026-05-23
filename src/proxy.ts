@@ -8,7 +8,7 @@ const handleI18nRouting = createMiddleware(routing);
 const SECRET_KEY = process.env.JWT_SECRET_KEY || "your-secret-key";
 const encoder = new TextEncoder();
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isUploadPath = /^\/(?:ko\/)?upload$/.test(pathname);
 
