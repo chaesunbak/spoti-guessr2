@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Play, ChartBarDecreasing } from "lucide-react";
+import { Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import releaseNotes from "@/data/release-notes.json";
@@ -51,17 +51,6 @@ export default async function Home() {
                   {t("startPlaying")}
                 </Link>
               </Button>
-              <Button
-                variant="secondary"
-                asChild
-                disabled
-                aria-label="View leaderboard (Coming soon)"
-              >
-                <a>
-                  <ChartBarDecreasing aria-hidden="true" />
-                  {t("viewLeaderboard")}
-                </a>
-              </Button>
             </div>
           </div>
         </section>
@@ -75,7 +64,9 @@ export default async function Home() {
             <div className="scrollbar-none flex-1 space-y-1 overflow-y-auto text-xs text-muted-foreground md:text-sm">
               {releaseNotes[0] && (
                 <>
-                  <p>{t("currentVersion", { version: releaseNotes[0].version })}</p>
+                  <p>
+                    {t("currentVersion", { version: releaseNotes[0].version })}
+                  </p>
                   <p>{t("lastUpdated", { date: releaseNotes[0].date })}</p>
                   {releaseNotes[0].features.length > 0 && (
                     <>

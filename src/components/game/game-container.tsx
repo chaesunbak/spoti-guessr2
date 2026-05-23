@@ -124,7 +124,6 @@ export function GameContainer({ mode, genre }: GameContainerProps) {
           currentRound={gameState.currentRound}
           startTime={gameState.startTime}
           endTime={gameState.endTime}
-          sessionId={gameState.sessionId}
           onRestart={restartGame}
         />
       )}
