@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import QueryClinetProvider from "@/providers/query-client-provider";
 import { cookies } from "next/headers";
 import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { MuteStoreProvider } from "@/providers/mute-store-provider";
 import { AuthStoreProvider } from "@/providers/auth-store-provider";
@@ -97,16 +98,18 @@ export default async function RootLayout({
             >
               <AuthStoreProvider>
                 <MuteStoreProvider>
-                  <SidebarProvider defaultOpen={defaultOpen}>
-                    <AppSidebar />
-                    <div className="w-full">
-                      <AppHeader />
-                      <main className="min-h-[calc(100vh-3.5rem)]">
-                        {children}
-                      </main>
-                      <Toaster />
-                    </div>
-                  </SidebarProvider>
+                  <TooltipProvider delayDuration={0}>
+                    <SidebarProvider defaultOpen={defaultOpen}>
+                      <AppSidebar />
+                      <div className="w-full">
+                        <AppHeader />
+                        <main className="min-h-[calc(100vh-3.5rem)]">
+                          {children}
+                        </main>
+                        <Toaster />
+                      </div>
+                    </SidebarProvider>
+                  </TooltipProvider>
                 </MuteStoreProvider>
               </AuthStoreProvider>
             </ThemeProvider>
