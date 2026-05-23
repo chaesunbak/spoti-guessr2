@@ -6,7 +6,6 @@ import { GameReady } from "@/components/game/game-ready";
 import { GamePlaying } from "@/components/game/game-playing";
 import { GameFinished } from "@/components/game/game-finished";
 import { sendGAEvent } from "@next/third-parties/google";
-import { v4 as uuidv4 } from "uuid";
 
 interface GameContainerProps {
   mode: GameMode;
@@ -20,7 +19,7 @@ export function GameContainer({ mode, genre }: GameContainerProps) {
     currentRound: 0,
     totalRounds: Infinity,
     startTime: new Date(),
-    sessionId: uuidv4(),
+    sessionId: crypto.randomUUID(),
   }));
 
   const startGame = () => {
@@ -78,7 +77,7 @@ export function GameContainer({ mode, genre }: GameContainerProps) {
       score: 0,
       currentRound: 0,
       totalRounds: Infinity,
-      sessionId: uuidv4(),
+      sessionId: crypto.randomUUID(),
     });
 
     sendGAEvent("event", "game_restarted", {
@@ -125,6 +124,7 @@ export function GameContainer({ mode, genre }: GameContainerProps) {
           currentRound={gameState.currentRound}
           startTime={gameState.startTime}
           endTime={gameState.endTime}
+          sessionId={gameState.sessionId}
           onRestart={restartGame}
         />
       )}
